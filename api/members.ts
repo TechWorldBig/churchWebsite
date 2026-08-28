@@ -1,8 +1,9 @@
-import { ensureSchema, sendError, sql } from './_lib/db.js'
+import { ensureSchema, getSql, sendError } from './_lib/db.js'
 
 export default async function handler(req: any, res: any) {
   try {
     await ensureSchema()
+    const sql = getSql()
     if (req.method === 'GET') {
       const rows = await sql`SELECT id, name, role, email, phone, address, date_of_birth AS "dateOfBirth", focus, photo FROM members ORDER BY created_at DESC`
       return res.status(200).json(rows)
