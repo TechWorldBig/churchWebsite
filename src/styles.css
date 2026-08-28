@@ -39,6 +39,17 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   .secondary-dark-btn { @apply w-full justify-center; }
   .field-label { @apply text-[10px] tracking-[0.1em]; }
   .admin-page .soft-card { @apply p-4; }
+  .admin-page { padding-top: 2rem; padding-bottom: 3rem; }
+  .admin-page > .mx-auto { width: 100%; }
+  .admin-page .primary-btn, .admin-page .secondary-dark-btn { min-height: 3rem; }
+  .admin-gallery-inline { margin-top: 1.5rem; padding-top: 1.5rem; }
+  .admin-gallery-inline > div:first-child { align-items: flex-start; }
+  .admin-gallery-inline .grid { min-width: 0; }
+  .admin-gallery-inline input[type='file'] { min-width: 0; overflow: hidden; padding: .65rem; }
+  .admin-gallery-inline .secondary-dark-btn { width: auto; }
+  .admin-gallery-inline article img { height: 12rem; }
+  .admin-gallery-inline article .p-4 { padding: 1rem; }
+  .admin-gallery-inline article .flex { flex-wrap: wrap; }
   .admin-page aside .primary-btn { @apply w-auto; }
   .admin-page aside .secondary-dark-btn { @apply w-auto; }
   .admin-page .overflow-x-auto { -webkit-overflow-scrolling: touch; }
@@ -64,6 +75,17 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
 @media (min-width: 640px) and (max-width: 1023px) {
   .soft-card { @apply p-6; }
+  .admin-page .grid.lg\:grid-cols-\[420px_1fr\] { grid-template-columns: minmax(17rem, 22rem) minmax(0, 1fr); }
+  .admin-gallery-inline .lg\:grid-cols-\[340px_1fr\] { grid-template-columns: minmax(16rem, 20rem) minmax(0, 1fr); }
+}
+
+@media (min-width: 1024px) {
+  .admin-page { padding-top: 4rem; padding-bottom: 5rem; }
+  .admin-page .soft-card { padding: 1.75rem; }
+  .admin-gallery-inline { margin-top: 2rem; padding-top: 2rem; }
+  .admin-gallery-inline > .grid { align-items: start; }
+  .admin-gallery-inline article img { height: 13rem; }
+  .admin-gallery-inline article .p-4 { min-height: 9rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {
