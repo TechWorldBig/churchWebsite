@@ -1,9 +1,10 @@
 import { neon } from '@neondatabase/serverless'
 
-export const sql = neon(process.env.DATABASE_URL || '')
+const connectionString = process.env.DATABASE_URL || process.env.POSTGRES_URL || ''
+export const sql = neon(connectionString)
 
 export async function ensureSchema() {
-  if (!process.env.DATABASE_URL) throw new Error('DATABASE_URL is not configured')
+  if (!connectionString) throw new Error('DATABASE_URL or POSTGRES_URL is not configured')
   await sql`
     CREATE TABLE IF NOT EXISTS members (
       id TEXT PRIMARY KEY,
