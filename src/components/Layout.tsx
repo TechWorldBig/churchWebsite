@@ -1,8 +1,7 @@
 import { type ReactNode, useState } from 'react'
 import { Menu, X, Cross, Instagram, Youtube } from 'lucide-react'
-import { Link, NavLink, useLocation } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import AdminGallery from '../pages/AdminGallery'
 
 const links = [
   ['Home', '/'],
@@ -16,7 +15,6 @@ const links = [
 
 export default function Layout({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false)
-  const location = useLocation()
 
   return (
     <div className="min-h-screen bg-stone-50 text-slate-900">
@@ -64,7 +62,7 @@ export default function Layout({ children }: { children: ReactNode }) {
         </AnimatePresence>
       </header>
 
-      <main>{children}{location.pathname === '/admin' && <div className="border-t border-slate-200 bg-stone-50"><AdminGallery embedded /></div>}</main>
+      <main>{children}</main>
 
       <footer className="bg-[#041511] text-white">
         <div className="mx-auto grid max-w-7xl gap-10 px-5 py-14 md:grid-cols-[1.4fr_1fr_1fr] lg:px-8">
