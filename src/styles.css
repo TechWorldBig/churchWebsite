@@ -24,11 +24,18 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   .glass-dark { @apply border border-white/15 bg-black/30 backdrop-blur-xl; }
   .panorama-button { @apply grid h-12 w-12 place-items-center rounded-full border border-white/15 bg-black/35 text-white backdrop-blur-xl transition hover:bg-white hover:text-[#071f19]; }
   .social-icon { @apply grid h-10 w-10 place-items-center rounded-xl border border-white/10 bg-white/5 text-white/65; }
+  .footer-link { @apply transition hover:translate-x-1 hover:text-[#e3bc62]; }
   .field-label { @apply grid gap-2 text-xs font-bold uppercase tracking-[0.12em] text-slate-500; }
   .field { @apply w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-medium normal-case tracking-normal text-slate-900 outline-none transition placeholder:font-normal focus:border-emerald-700 focus:bg-white focus:ring-2 focus:ring-emerald-700/10; }
 }
 
 @media (max-width: 639px) {
+  .site-header > div { min-height: 4.25rem; }
+  .site-header .menu-toggle { min-height: 2.75rem; min-width: 2.75rem; }
+  .mobile-nav { max-height: calc(100svh - 4.25rem); overflow-y: auto; }
+  .mobile-nav a { min-height: 3rem; display: flex; align-items: center; }
+  .site-footer > div:first-child { padding-top: 3rem; padding-bottom: 3rem; }
+  .site-footer .social-icon { min-height: 2.75rem; min-width: 2.75rem; }
   .page-hero { padding-top: 7rem; padding-bottom: 3rem; }
   .page-hero h1 { font-size: clamp(2rem, 10vw, 3rem); line-height: 1.05; }
   .page-hero p { max-width: none; font-size: .95rem; line-height: 1.7; }
@@ -85,6 +92,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 }
 
 @media (min-width: 1024px) {
+  .site-header nav a { letter-spacing: .01em; }
+  .site-footer > div:first-child { padding-top: 4.5rem; padding-bottom: 4.5rem; }
   .page-hero h1 { max-width: 56rem; }
   main > section:not(.page-hero) { padding-top: 5rem; padding-bottom: 5rem; }
   .admin-page { padding-top: 4rem; padding-bottom: 5rem; }

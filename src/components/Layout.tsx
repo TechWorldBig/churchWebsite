@@ -18,7 +18,7 @@ export default function Layout({ children }: { children: ReactNode }) {
 
   return (
     <div className="min-h-screen bg-stone-50 text-slate-900">
-      <header className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-[#071f19]/88 text-white backdrop-blur-xl">
+      <header className="site-header fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-[#071f19]/88 text-white backdrop-blur-xl">
         <div className="mx-auto flex h-[4.5rem] max-w-7xl items-center justify-between px-4 sm:h-20 sm:px-5 lg:px-8">
           <Link to="/" className="group flex items-center gap-3" onClick={() => setOpen(false)}>
             <span className="grid h-10 w-10 place-items-center rounded-xl bg-[#e3bc62] text-[#071f19] shadow-lg shadow-black/15 transition group-hover:rotate-3 sm:h-11 sm:w-11 sm:rounded-2xl">
@@ -30,7 +30,7 @@ export default function Layout({ children }: { children: ReactNode }) {
             </span>
           </Link>
 
-          <nav className="hidden items-center gap-1 lg:flex">
+          <nav aria-label="Main navigation" className="hidden items-center gap-1 lg:flex">
             {links.map(([label, to]) => (
               <NavLink
                 key={to}
@@ -43,13 +43,13 @@ export default function Layout({ children }: { children: ReactNode }) {
             ))}
           </nav>
 
-          <button className="rounded-xl p-2 lg:hidden" aria-label="Toggle navigation" onClick={() => setOpen((v) => !v)}>
+          <button className="menu-toggle rounded-xl p-2 lg:hidden" aria-expanded={open} aria-label={open ? 'Close navigation' : 'Open navigation'} onClick={() => setOpen((v) => !v)}>
             {open ? <X /> : <Menu />}
           </button>
         </div>
         <AnimatePresence>
           {open && (
-            <motion.nav initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="overflow-hidden border-t border-white/10 bg-[#071f19] px-4 shadow-2xl lg:hidden">
+            <motion.nav aria-label="Mobile navigation" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="mobile-nav overflow-hidden border-t border-white/10 bg-[#071f19] px-4 shadow-2xl lg:hidden">
               <div className="grid gap-1 py-4">
                 {links.map(([label, to]) => (
                   <NavLink key={to} to={to} end={to === '/'} onClick={() => setOpen(false)} className={({ isActive }) => `rounded-xl px-4 py-3 font-semibold ${isActive ? 'bg-white text-[#071f19]' : 'text-white/70'}`}>
@@ -64,19 +64,19 @@ export default function Layout({ children }: { children: ReactNode }) {
 
       <main>{children}</main>
 
-      <footer className="bg-[#041511] text-white">
+      <footer className="site-footer bg-[#041511] text-white">
         <div className="mx-auto grid max-w-7xl gap-10 px-5 py-14 md:grid-cols-[1.4fr_1fr_1fr] lg:px-8">
           <div>
-            <div className="mb-4 flex items-center gap-3 font-black"><Cross className="text-[#e3bc62]" /> JSC Youth Development Ministry</div>
+            <div className="mb-4 flex items-center gap-3 font-black"><span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-[#e3bc62] text-[#071f19]"><Cross size={21} /></span><span>JSC Youth Development Ministry</span></div>
             <p className="max-w-md text-sm leading-7 text-white/55">A Christ-centered youth community growing together through worship, Scripture, fellowship, service and leadership.</p>
           </div>
           <div>
             <h3 className="mb-4 text-sm font-bold uppercase tracking-[0.18em] text-[#e3bc62]">Explore</h3>
-            <div className="grid gap-2 text-sm text-white/60"><Link to="/members">YDM Members</Link><Link to="/gallery">Gallery</Link><Link to="/programs">Programs</Link><Link to="/attendance">Attendance</Link><Link to="/about">About</Link></div>
+            <div className="grid gap-2 text-sm text-white/60"><Link className="footer-link" to="/members">YDM Members</Link><Link className="footer-link" to="/gallery">Gallery</Link><Link className="footer-link" to="/programs">Programs</Link><Link className="footer-link" to="/attendance">Attendance</Link><Link className="footer-link" to="/about">About</Link></div>
           </div>
           <div>
             <h3 className="mb-4 text-sm font-bold uppercase tracking-[0.18em] text-[#e3bc62]">Connect</h3>
-            <div className="flex gap-3"><span className="social-icon"><Instagram size={18} /></span><span className="social-icon"><Youtube size={18} /></span></div>
+            <div className="flex gap-3" aria-label="Social media"><span className="social-icon"><Instagram size={18} /></span><span className="social-icon"><Youtube size={18} /></span></div>
           </div>
         </div>
         <div className="border-t border-white/10 px-5 py-5 text-center text-xs text-white/35">© {new Date().getFullYear()} JSC Youth Development Ministry. Faith • Fellowship • Service.</div>
