@@ -1,4 +1,4 @@
-import { ensureSchema, sendError, sql } from './_lib/db'
+import { ensureSchema, sendError, sql } from './_lib/db.js'
 
 export default async function handler(_req: any, res: any) {
   try {
