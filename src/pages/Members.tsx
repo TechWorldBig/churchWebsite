@@ -9,10 +9,7 @@ export default function Members() {
   const [members, setMembers] = useState<Member[]>([])
 
   useEffect(() => {
-    const refreshMembers = () => getMembers().then(setMembers).catch(() => setMembers([]))
-    refreshMembers()
-    window.addEventListener('storage', refreshMembers)
-    return () => window.removeEventListener('storage', refreshMembers)
+    getMembers().then(setMembers).catch(() => setMembers([]))
   }, [])
 
   return <><PageHero eyebrow="Our people" title="YDM Members" description="Meet the young people serving together with different gifts and one purpose — to glorify Christ and strengthen the youth community." icon={<Users size={15} />} /><section className="py-20"><div className="mx-auto max-w-7xl px-5 lg:px-8">
