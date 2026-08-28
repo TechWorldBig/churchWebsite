@@ -41,8 +41,10 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   .admin-page table { font-size: .8rem; }
   .admin-page th, .admin-page td { white-space: nowrap; }
   .admin-page .min-w-\[700px\] { min-width: 620px; }
-  #panorama-stage { height: min(60vw, 420px); min-height: 240px; }
-  #panorama-stage > img { object-fit: contain; background: #031611; }
+  #panorama-stage { height: calc(min(60vw, 420px) + 96px); min-height: 336px; }
+  #panorama-stage > img { height: min(60vw, 420px); bottom: auto; object-fit: contain; background: #031611; }
+  #panorama-stage > div:nth-of-type(1), #panorama-stage > div:nth-of-type(2) { height: min(60vw, 420px); bottom: auto; }
+  #panorama-stage > div:last-child { top: min(60vw, 420px); bottom: auto; height: 96px; padding: 12px 20px; background: #071f19; }
 }
 
 @media (min-width: 640px) and (max-width: 1023px) {
