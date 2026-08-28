@@ -41,6 +41,11 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   .admin-page table { font-size: .8rem; }
   .admin-page th, .admin-page td { white-space: nowrap; }
   .admin-page .min-w-\[700px\] { min-width: 620px; }
+  .attendance-page .soft-card { @apply p-4; }
+  .attendance-page .soft-card .text-3xl { @apply text-2xl; }
+  .attendance-page article > img, .attendance-page article > div:first-child { height: 10rem; }
+  .attendance-page article .p-6 { @apply p-4; }
+  .attendance-page .max-h-48 { max-height: 10rem; }
   #panorama-stage { height: calc(min(60vw, 420px) + 96px); min-height: 336px; }
   #panorama-stage > img { height: min(60vw, 420px); bottom: auto; object-fit: contain; background: #031611; }
   #panorama-stage > div:nth-of-type(1), #panorama-stage > div:nth-of-type(2) { height: min(60vw, 420px); bottom: auto; }
