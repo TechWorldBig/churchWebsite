@@ -15,8 +15,10 @@ export const getAdminSessionExpiry = () => readExpiry()
 export const startAdminSession = () => {
   const expiry = Date.now() + SESSION_LENGTH
   sessionStorage.setItem(SESSION_KEY, String(expiry))
+  window.dispatchEvent(new Event('jsc-admin-session'))
 }
 
 export const clearAdminSession = () => {
   sessionStorage.removeItem(SESSION_KEY)
+  window.dispatchEvent(new Event('jsc-admin-session'))
 }
