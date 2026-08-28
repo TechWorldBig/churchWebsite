@@ -1,6 +1,6 @@
 import { type ReactNode, useState } from 'react'
 import { Menu, X, Cross, Instagram, Youtube } from 'lucide-react'
-import { Link, NavLink } from 'react-router-dom'
+import { Link, NavLink, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 
 const links = [
@@ -15,6 +15,8 @@ const links = [
 
 export default function Layout({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false)
+  const location = useLocation()
+  const isAdminArea = location.pathname.startsWith('/admin')
 
   return (
     <div className="min-h-screen bg-stone-50 text-slate-900">
@@ -41,6 +43,7 @@ export default function Layout({ children }: { children: ReactNode }) {
                 {label}
               </NavLink>
             ))}
+            {isAdminArea && <NavLink to="/admin/gallery" className={({ isActive }) => `rounded-full px-4 py-2 text-sm font-semibold transition ${isActive ? 'bg-white text-[#071f19]' : 'text-white/75 hover:bg-white/10 hover:text-white'}`}>Gallery Admin</NavLink>}
           </nav>
 
           <button className="rounded-xl p-2 lg:hidden" aria-label="Toggle navigation" onClick={() => setOpen((v) => !v)}>
@@ -56,6 +59,7 @@ export default function Layout({ children }: { children: ReactNode }) {
                     {label}
                   </NavLink>
                 ))}
+                {isAdminArea && <NavLink to="/admin/gallery" onClick={() => setOpen(false)} className={({ isActive }) => `rounded-xl px-4 py-3 font-semibold ${isActive ? 'bg-white text-[#071f19]' : 'text-white/70'}`}>Gallery Admin</NavLink>}
               </div>
             </motion.nav>
           )}
