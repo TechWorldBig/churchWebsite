@@ -1,4 +1,6 @@
-# JSC Youth Development Ministry
+# churchWebsite
+
+## JSC Youth Development Ministry
 
 React + TypeScript + Vite + Tailwind CSS + Framer Motion site built from the five supplied JSC campus screenshots.
 
