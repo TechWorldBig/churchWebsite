@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { CalendarCheck, CheckCircle2, Clock3, Mail, Phone, TrendingUp, Users } from 'lucide-react'
 import PageHero from '../components/PageHero'
-import { AttendanceRecord, ATTENDANCE_STORAGE_KEY, Member, MEMBERS_STORAGE_KEY, readStored, SYSTEM_UPDATED_STORAGE_KEY } from '../data/memberStore'
+import { AttendanceRecord, Member } from '../data/memberStore'
 import { getAttendance, getLastUpdated, getMembers } from '../data/api'
 
 const formatDate = (value: string) => new Date(`${value}T00:00:00`).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' })
@@ -16,11 +16,7 @@ export default function Attendance() {
       setMembers(savedMembers)
       setRecords(savedRecords)
       setLastUpdatedValue(updated.value)
-    }).catch(() => {
-      setMembers(readStored(MEMBERS_STORAGE_KEY, []))
-      setRecords(readStored(ATTENDANCE_STORAGE_KEY, []))
-      setLastUpdatedValue(localStorage.getItem(SYSTEM_UPDATED_STORAGE_KEY))
-    })
+    }).catch(() => { setMembers([]); setRecords([]); setLastUpdatedValue(null) })
   }, [])
   const month = new Date().toISOString().slice(0, 7)
   const monthRecords = records.filter(record => record.date.startsWith(month))

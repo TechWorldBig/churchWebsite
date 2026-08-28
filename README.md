@@ -17,7 +17,7 @@ npm run dev
 npm run build
 ```
 
-The admin attendance page currently persists records to browser `localStorage`. Replace that persistence layer with authenticated backend APIs before production.
+Members and attendance are stored through the server-side Neon API. No member, attendance, login, or metadata data is stored in browser `localStorage`.
 
 ## Neon and Vercel setup
 

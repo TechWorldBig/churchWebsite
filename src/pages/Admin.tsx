@@ -1,10 +1,9 @@
 import { ChangeEvent, useEffect, useMemo, useRef, useState } from 'react'
 import { CalendarDays, Check, Download, LockKeyhole, Pencil, Plus, Search, ShieldCheck, Trash2, UserCog, UserPlus, X } from 'lucide-react'
 import PageHero from '../components/PageHero'
-import { AttendanceRecord, ATTENDANCE_STORAGE_KEY, Member, MEMBERS_STORAGE_KEY, readStored, SYSTEM_UPDATED_STORAGE_KEY } from '../data/memberStore'
+import { AttendanceRecord, Member } from '../data/memberStore'
 import { createAttendance, createMember, deleteAttendance, deleteMember, getAttendance, getMembers, updateAttendance, updateMember as saveMemberToApi } from '../data/api'
 
-const AUTH_KEY = 'jsc-ydm-admin-auth'
 const ADMIN_USERNAME = 'admin'
 const ADMIN_PASSWORD = 'ydm-admin-2026'
 const emptyMember: Omit<Member, 'id'> = { name: '', role: '', email: '', phone: '', address: '', dateOfBirth: '', focus: '', photo: '' }
@@ -13,7 +12,7 @@ const uniqueMembers = (items: Member[]) => Array.from(new Map(items.map(item => 
 const uniqueRecords = (items: AttendanceRecord[]) => Array.from(new Map(items.map(item => [`${item.memberId || item.name.trim().toLowerCase()}-${item.date}`, item])).values())
 
 export default function Admin() {
-  const [isAuthed, setIsAuthed] = useState(() => localStorage.getItem(AUTH_KEY) === 'true')
+  const [isAuthed, setIsAuthed] = useState(false)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [members, setMembers] = useState<Member[]>([])
@@ -29,21 +28,17 @@ export default function Admin() {
   const [query, setQuery] = useState('')
   const photoInputRef = useRef<HTMLInputElement>(null)
 
-  useEffect(() => localStorage.setItem(AUTH_KEY, String(isAuthed)), [isAuthed])
   useEffect(() => {
     if (!isAuthed) return
     Promise.all([getMembers(), getAttendance()]).then(([savedMembers, savedRecords]) => {
       setMembers(uniqueMembers(savedMembers))
       setRecords(uniqueRecords(savedRecords))
-    }).catch(() => {
-      setMembers(uniqueMembers(readStored<Member[]>(MEMBERS_STORAGE_KEY, [])))
-      setRecords(uniqueRecords(readStored<AttendanceRecord[]>(ATTENDANCE_STORAGE_KEY, [])))
-    })
+    }).catch(() => { setMemberMessage('Could not load members. Check the database connection.'); setAttendanceMessage('Could not load attendance. Check the database connection.') })
   }, [isAuthed])
 
   const filtered = useMemo(() => { const term = query.toLowerCase(); return records.filter(r => r.name.toLowerCase().includes(term) || r.date.includes(term)) }, [records, query])
   const updateMember = (key: keyof typeof emptyMember, value: string) => setMember(current => ({ ...current, [key]: value }))
-  const touchUpdated = () => localStorage.setItem(SYSTEM_UPDATED_STORAGE_KEY, new Date().toISOString())
+  const touchUpdated = () => undefined
   const uploadPhoto = (event: ChangeEvent<HTMLInputElement>) => { const file = event.target.files?.[0]; if (!file) return; const reader = new FileReader(); reader.onload = () => updateMember('photo', String(reader.result)); reader.readAsDataURL(file) }
 
   const saveMember = () => {

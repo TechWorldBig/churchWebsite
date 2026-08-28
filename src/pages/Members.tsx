@@ -2,14 +2,14 @@ import { useEffect, useState } from 'react'
 import { Mail, Phone, Users } from 'lucide-react'
 import { motion } from 'framer-motion'
 import PageHero from '../components/PageHero'
-import { Member, MEMBERS_STORAGE_KEY, readStored } from '../data/memberStore'
+import { Member } from '../data/memberStore'
 import { getMembers } from '../data/api'
 
 export default function Members() {
   const [members, setMembers] = useState<Member[]>([])
 
   useEffect(() => {
-    const refreshMembers = () => getMembers().then(setMembers).catch(() => setMembers(readStored<Member[]>(MEMBERS_STORAGE_KEY, [])))
+    const refreshMembers = () => getMembers().then(setMembers).catch(() => setMembers([]))
     refreshMembers()
     window.addEventListener('storage', refreshMembers)
     return () => window.removeEventListener('storage', refreshMembers)

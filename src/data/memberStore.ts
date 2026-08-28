@@ -18,15 +18,3 @@ export type AttendanceRecord = {
   present: boolean
   note: string
 }
-
-export const MEMBERS_STORAGE_KEY = 'jsc-ydm-members'
-export const ATTENDANCE_STORAGE_KEY = 'jsc-ydm-attendance'
-export const SYSTEM_UPDATED_STORAGE_KEY = 'jsc-ydm-system-updated'
-
-export function readStored<T>(key: string, fallback: T): T {
-  try {
-    return JSON.parse(localStorage.getItem(key) || 'null') || fallback
-  } catch {
-    return fallback
-  }
-}
