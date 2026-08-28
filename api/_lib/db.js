@@ -43,6 +43,15 @@ export async function ensureSchema() {
       value TEXT NOT NULL
     )
   `
+  await sql`
+    CREATE TABLE IF NOT EXISTS gallery_photos (
+      id TEXT PRIMARY KEY,
+      photo TEXT NOT NULL,
+      date TEXT NOT NULL,
+      description TEXT NOT NULL DEFAULT '',
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `
 }
 
 export function sendError(res, error) {

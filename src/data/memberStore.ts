@@ -18,3 +18,10 @@ export type AttendanceRecord = {
   present: boolean
   note: string
 }
+
+export type GalleryPhoto = {
+  id: string
+  photo: string
+  date: string
+  description: string
+}

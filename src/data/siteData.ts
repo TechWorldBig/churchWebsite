@@ -21,9 +21,3 @@ export const programs: MinistryProgram[] = [
   { id: 4, title: 'Bible Quiz', schedule: '1st & 3rd Week of Every Month', description: 'Test your knowledge of Scripture, sharpen your understanding and enjoy learning together.', icon: '04' },
   { id: 5, title: 'Message', schedule: '1st & 3rd Week of Every Month', description: 'Receive a Christ-centered message to encourage your faith and guide your daily walk.', icon: '05' },
 ]
-
-export const galleryItems = panoramaFrames.map((src, index) => ({
-  src,
-  title: ['Church Front View', 'Youth Ministry Hall', 'Ministry Hall Close-up', 'Campus Road View', 'Church Campus'][index],
-  category: ['Campus', 'Ministry', 'Ministry', 'Campus', 'Campus'][index],
-}))
