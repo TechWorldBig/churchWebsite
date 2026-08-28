@@ -35,6 +35,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   .secondary-dark-btn { @apply w-full justify-center; }
   .field-label { @apply text-[10px] tracking-[0.1em]; }
   .admin-page .soft-card { @apply p-4; }
+  .admin-page aside .primary-btn { @apply w-auto; }
+  .admin-page aside .secondary-dark-btn { @apply w-auto; }
   .admin-page .overflow-x-auto { -webkit-overflow-scrolling: touch; }
   .admin-page table { font-size: .8rem; }
   .admin-page th, .admin-page td { white-space: nowrap; }
