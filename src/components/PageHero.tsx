@@ -3,7 +3,7 @@ import type { ReactNode } from 'react'
 
 export default function PageHero({ eyebrow, title, description, icon }: { eyebrow: string; title: string; description: string; icon?: ReactNode }) {
   return (
-    <section className="relative overflow-hidden bg-[#071f19] pb-14 pt-28 text-white sm:pb-20 sm:pt-36">
+    <section className="page-hero relative overflow-hidden bg-[#071f19] pb-14 pt-28 text-white sm:pb-20 sm:pt-36">
       <div className="absolute -right-24 top-16 h-80 w-80 rounded-full bg-[#e3bc62]/10 blur-3xl" />
       <div className="absolute -left-20 bottom-0 h-56 w-56 rounded-full bg-emerald-400/10 blur-3xl" />
       <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[#e3bc62]/60 to-transparent" />
