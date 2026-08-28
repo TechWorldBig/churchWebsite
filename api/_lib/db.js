@@ -45,7 +45,7 @@ export async function ensureSchema() {
   `
 }
 
-export function sendError(res: any, error: unknown) {
+export function sendError(res, error) {
   console.error(error)
   res.status(500).json({ error: 'Database request failed' })
 }
