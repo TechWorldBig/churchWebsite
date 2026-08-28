@@ -29,6 +29,10 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 }
 
 @media (max-width: 639px) {
+  main > section + section { padding-top: 3.5rem; padding-bottom: 3.5rem; }
+  main h2.text-4xl { font-size: 2rem; line-height: 1.1; }
+  main h2.text-3xl { font-size: 1.75rem; line-height: 1.15; }
+  main h1 { overflow-wrap: anywhere; }
   .soft-card { @apply rounded-2xl p-5; }
   .section-title { @apply text-3xl leading-tight; }
   .primary-btn, .secondary-btn, .dark-btn { @apply w-full justify-center px-5 py-3.5; }
@@ -46,6 +50,12 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   .attendance-page article > img, .attendance-page article > div:first-child { height: 10rem; }
   .attendance-page article .p-6 { @apply p-4; }
   .attendance-page .max-h-48 { max-height: 10rem; }
+  main > section + section img.h-\[420px\] { height: 16rem; }
+  main > section + section img.h-56 { height: 10rem; }
+  main > section + section img.h-52 { height: 11rem; }
+  main > section + section div.h-64 { height: 12rem; }
+  footer .grid { gap: 2.25rem; }
+  footer { font-size: .95rem; }
   #panorama-stage { height: calc(min(60vw, 420px) + 96px); min-height: 336px; }
   #panorama-stage > img { height: min(60vw, 420px); bottom: auto; object-fit: contain; background: #031611; }
   #panorama-stage > div:nth-of-type(1), #panorama-stage > div:nth-of-type(2) { height: min(60vw, 420px); bottom: auto; }
