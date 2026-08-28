@@ -19,14 +19,14 @@ export default function Layout({ children }: { children: ReactNode }) {
   return (
     <div className="min-h-screen bg-stone-50 text-slate-900">
       <header className="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-[#071f19]/88 text-white backdrop-blur-xl">
-        <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-5 lg:px-8">
+        <div className="mx-auto flex h-[4.5rem] max-w-7xl items-center justify-between px-4 sm:h-20 sm:px-5 lg:px-8">
           <Link to="/" className="group flex items-center gap-3" onClick={() => setOpen(false)}>
-            <span className="grid h-11 w-11 place-items-center rounded-2xl bg-[#e3bc62] text-[#071f19] shadow-lg shadow-black/15 transition group-hover:rotate-3">
+            <span className="grid h-10 w-10 place-items-center rounded-xl bg-[#e3bc62] text-[#071f19] shadow-lg shadow-black/15 transition group-hover:rotate-3 sm:h-11 sm:w-11 sm:rounded-2xl">
               <Cross size={22} strokeWidth={2.4} />
             </span>
             <span className="leading-tight">
-              <span className="block text-base font-black tracking-[0.08em]">JSC YDM</span>
-              <span className="block text-[10px] font-semibold uppercase tracking-[0.2em] text-white/55">Youth Development Ministry</span>
+              <span className="block text-sm font-black tracking-[0.08em] sm:text-base">JSC YDM</span>
+              <span className="hidden text-[10px] font-semibold uppercase tracking-[0.2em] text-white/55 sm:block">Youth Development Ministry</span>
             </span>
           </Link>
 
@@ -49,7 +49,7 @@ export default function Layout({ children }: { children: ReactNode }) {
         </div>
         <AnimatePresence>
           {open && (
-            <motion.nav initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="overflow-hidden border-t border-white/10 bg-[#071f19] px-5 lg:hidden">
+            <motion.nav initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="overflow-hidden border-t border-white/10 bg-[#071f19] px-4 shadow-2xl lg:hidden">
               <div className="grid gap-1 py-4">
                 {links.map(([label, to]) => (
                   <NavLink key={to} to={to} end={to === '/'} onClick={() => setOpen(false)} className={({ isActive }) => `rounded-xl px-4 py-3 font-semibold ${isActive ? 'bg-white text-[#071f19]' : 'text-white/70'}`}>

@@ -1,19 +1,31 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { CalendarCheck, CheckCircle2, Clock3, Mail, Phone, TrendingUp, Users } from 'lucide-react'
 import PageHero from '../components/PageHero'
 import { AttendanceRecord, ATTENDANCE_STORAGE_KEY, Member, MEMBERS_STORAGE_KEY, readStored, SYSTEM_UPDATED_STORAGE_KEY } from '../data/memberStore'
+import { getAttendance, getLastUpdated, getMembers } from '../data/api'
 
 const formatDate = (value: string) => new Date(`${value}T00:00:00`).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' })
 const formatDateTime = (value: string) => new Date(value).toLocaleString(undefined, { day: 'numeric', month: 'short', year: 'numeric', hour: 'numeric', minute: '2-digit' })
 
 export default function Attendance() {
-  const [members] = useState<Member[]>(() => readStored(MEMBERS_STORAGE_KEY, []))
-  const [records] = useState<AttendanceRecord[]>(() => readStored(ATTENDANCE_STORAGE_KEY, []))
+  const [members, setMembers] = useState<Member[]>([])
+  const [records, setRecords] = useState<AttendanceRecord[]>([])
+  const [lastUpdatedValue, setLastUpdatedValue] = useState<string | null>(null)
+  useEffect(() => {
+    Promise.all([getMembers(), getAttendance(), getLastUpdated()]).then(([savedMembers, savedRecords, updated]) => {
+      setMembers(savedMembers)
+      setRecords(savedRecords)
+      setLastUpdatedValue(updated.value)
+    }).catch(() => {
+      setMembers(readStored(MEMBERS_STORAGE_KEY, []))
+      setRecords(readStored(ATTENDANCE_STORAGE_KEY, []))
+      setLastUpdatedValue(localStorage.getItem(SYSTEM_UPDATED_STORAGE_KEY))
+    })
+  }, [])
   const month = new Date().toISOString().slice(0, 7)
   const monthRecords = records.filter(record => record.date.startsWith(month))
   const meetingCount = new Set(monthRecords.map(record => record.date)).size
   const average = records.length ? Math.round((records.filter(record => record.present).length / records.length) * 100) : 0
-  const lastUpdatedValue = localStorage.getItem(SYSTEM_UPDATED_STORAGE_KEY)
   const lastUpdated = lastUpdatedValue ? formatDateTime(lastUpdatedValue) : 'Not updated yet'
   const stats: Array<[string, string, typeof Users]> = [
     ['Active members', String(members.length), Users],

@@ -13,16 +13,16 @@ const pillars = [
 export default function Home() {
   return (
     <>
-      <section className="relative flex min-h-screen items-center overflow-hidden bg-[#071f19] pt-20 text-white">
+      <section className="relative flex min-h-[min(760px,100svh)] items-center overflow-hidden bg-[#071f19] pt-[4.5rem] text-white sm:min-h-screen sm:pt-20">
         <img src="/screenshots/church-04.png" alt="JSC Kollemcode church campus" className="absolute inset-0 z-0 h-full w-full object-cover opacity-60" />
         <div className="absolute inset-0 z-[1] bg-gradient-to-r from-[#041511]/80 via-[#041511]/45 to-transparent" />
         <div className="absolute inset-0 z-[1] bg-gradient-to-t from-[#041511]/80 via-transparent to-[#041511]/20" />
         <div className="relative z-10 mx-auto w-full max-w-7xl px-5 py-24 lg:px-8">
           <motion.div initial={{ opacity: 0, y: 35 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .8 }} className="max-w-3xl">
             <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#e3bc62]/30 bg-[#e3bc62]/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.2em] text-[#f0d28d]"><Sparkles size={14}/> Faith • Fellowship • Service</div>
-            <h1 className="text-5xl font-black leading-[.98] tracking-[-.04em] sm:text-7xl lg:text-8xl">A generation<br/><span className="text-[#e3bc62]">growing in church.</span></h1>
-            <p className="mt-7 max-w-2xl text-base leading-8 text-white/65 sm:text-lg">JSC Youth Development Ministry is a place for young people to worship, learn, serve, lead and build friendships that strengthen faith for life.</p>
-            <div className="mt-9 flex flex-wrap gap-3"><Link to="/about" className="primary-btn">Discover our ministry <ArrowRight size={18}/></Link><Link to="/members" className="secondary-btn">Meet YDM</Link></div>
+            <h1 className="text-[clamp(2.8rem,12vw,5rem)] font-black leading-[.98] tracking-[-.04em] sm:text-7xl lg:text-8xl">A generation<br/><span className="text-[#e3bc62]">growing in church.</span></h1>
+            <p className="mt-6 max-w-2xl text-sm leading-7 text-white/65 sm:mt-7 sm:text-lg sm:leading-8">JSC Youth Development Ministry is a place for young people to worship, learn, serve, lead and build friendships that strengthen faith for life.</p>
+            <div className="mt-8 flex max-w-sm flex-col gap-3 sm:mt-9 sm:max-w-none sm:flex-row sm:flex-wrap"><Link to="/about" className="primary-btn">Discover our ministry <ArrowRight size={18}/></Link><Link to="/members" className="secondary-btn">Meet YDM</Link></div>
           </motion.div>
         </div>
         <div className="absolute bottom-7 right-6 hidden items-center gap-3 text-xs uppercase tracking-[0.18em] text-white/45 md:flex"><span className="h-px w-12 bg-white/30"/> Scroll to explore</div>

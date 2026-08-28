@@ -4,6 +4,7 @@
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body { margin: 0; min-width: 320px; background: radial-gradient(circle at 10% 10%, rgba(227,188,98,.08), transparent 28rem), #faf9f6; }
+body { overflow-x: hidden; }
 button, a, input, textarea { font: inherit; }
 button, a { -webkit-tap-highlight-color: transparent; }
 button, a, input, textarea, select { outline: none; }
@@ -25,4 +26,26 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   .social-icon { @apply grid h-10 w-10 place-items-center rounded-xl border border-white/10 bg-white/5 text-white/65; }
   .field-label { @apply grid gap-2 text-xs font-bold uppercase tracking-[0.12em] text-slate-500; }
   .field { @apply w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-medium normal-case tracking-normal text-slate-900 outline-none transition placeholder:font-normal focus:border-emerald-700 focus:bg-white focus:ring-2 focus:ring-emerald-700/10; }
+}
+
+@media (max-width: 639px) {
+  .soft-card { @apply rounded-2xl p-5; }
+  .section-title { @apply text-3xl leading-tight; }
+  .primary-btn, .secondary-btn, .dark-btn { @apply w-full justify-center px-5 py-3.5; }
+  .secondary-dark-btn { @apply w-full justify-center; }
+  .field-label { @apply text-[10px] tracking-[0.1em]; }
+  .admin-page .soft-card { @apply p-4; }
+  .admin-page .overflow-x-auto { -webkit-overflow-scrolling: touch; }
+  .admin-page table { font-size: .8rem; }
+  .admin-page th, .admin-page td { white-space: nowrap; }
+  .admin-page .min-w-\[700px\] { min-width: 620px; }
+}
+
+@media (min-width: 640px) and (max-width: 1023px) {
+  .soft-card { @apply p-6; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }

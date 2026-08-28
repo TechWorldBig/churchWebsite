@@ -2,6 +2,7 @@ import { ChangeEvent, useEffect, useMemo, useRef, useState } from 'react'
 import { CalendarDays, Check, Download, LockKeyhole, Pencil, Plus, Search, ShieldCheck, Trash2, UserCog, UserPlus, X } from 'lucide-react'
 import PageHero from '../components/PageHero'
 import { AttendanceRecord, ATTENDANCE_STORAGE_KEY, Member, MEMBERS_STORAGE_KEY, readStored, SYSTEM_UPDATED_STORAGE_KEY } from '../data/memberStore'
+import { createAttendance, createMember, deleteAttendance, deleteMember, getAttendance, getMembers, updateAttendance, updateMember as saveMemberToApi } from '../data/api'
 
 const AUTH_KEY = 'jsc-ydm-admin-auth'
 const ADMIN_USERNAME = 'admin'
@@ -15,8 +16,8 @@ export default function Admin() {
   const [isAuthed, setIsAuthed] = useState(() => localStorage.getItem(AUTH_KEY) === 'true')
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [members, setMembers] = useState<Member[]>(() => uniqueMembers(readStored<Member[]>(MEMBERS_STORAGE_KEY, [])))
-  const [records, setRecords] = useState<AttendanceRecord[]>(() => uniqueRecords(readStored<AttendanceRecord[]>(ATTENDANCE_STORAGE_KEY, [])))
+  const [members, setMembers] = useState<Member[]>([])
+  const [records, setRecords] = useState<AttendanceRecord[]>([])
   const [member, setMember] = useState(emptyMember)
   const [editingId, setEditingId] = useState<string | null>(null)
   const [memberId, setMemberId] = useState('')
@@ -29,8 +30,16 @@ export default function Admin() {
   const photoInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => localStorage.setItem(AUTH_KEY, String(isAuthed)), [isAuthed])
-  useEffect(() => localStorage.setItem(MEMBERS_STORAGE_KEY, JSON.stringify(members)), [members])
-  useEffect(() => localStorage.setItem(ATTENDANCE_STORAGE_KEY, JSON.stringify(records)), [records])
+  useEffect(() => {
+    if (!isAuthed) return
+    Promise.all([getMembers(), getAttendance()]).then(([savedMembers, savedRecords]) => {
+      setMembers(uniqueMembers(savedMembers))
+      setRecords(uniqueRecords(savedRecords))
+    }).catch(() => {
+      setMembers(uniqueMembers(readStored<Member[]>(MEMBERS_STORAGE_KEY, [])))
+      setRecords(uniqueRecords(readStored<AttendanceRecord[]>(ATTENDANCE_STORAGE_KEY, [])))
+    })
+  }, [isAuthed])
 
   const filtered = useMemo(() => { const term = query.toLowerCase(); return records.filter(r => r.name.toLowerCase().includes(term) || r.date.includes(term)) }, [records, query])
   const updateMember = (key: keyof typeof emptyMember, value: string) => setMember(current => ({ ...current, [key]: value }))
@@ -42,28 +51,31 @@ export default function Admin() {
     const duplicate = members.some(item => item.id !== editingId && item.name.trim().toLowerCase() === member.name.trim().toLowerCase())
     if (duplicate) { setMemberMessage('This member is already saved.'); return }
     const saved = { ...member, name: member.name.trim(), role: member.role.trim() || 'YDM Member' }
-    if (editingId) setMembers(current => current.map(item => item.id === editingId ? { ...item, ...saved } : item))
-    else setMembers(current => [{ id: crypto.randomUUID(), ...saved }, ...current])
-    setMember(emptyMember); setEditingId(null); setMemberMessage('Member saved successfully.'); touchUpdated()
+    const next = { id: editingId || crypto.randomUUID(), ...saved }
+    const request = editingId ? saveMemberToApi(next) : createMember(next)
+    request.then(() => {
+      setMembers(current => editingId ? current.map(item => item.id === editingId ? next : item) : [next, ...current])
+      setMember(emptyMember); setEditingId(null); setMemberMessage('Member saved successfully.'); touchUpdated()
+    }).catch(() => setMemberMessage('Could not save member. Check the database connection.'))
   }
   const editMember = (item: Member) => { const { id: _id, ...details } = item; setMember(details); setEditingId(item.id); window.scrollTo({ top: 0, behavior: 'smooth' }) }
-  const removeMember = (id: string) => { setMembers(current => current.filter(item => item.id !== id)); setRecords(current => current.filter(record => record.memberId !== id)); touchUpdated() }
+  const removeMember = (id: string) => { deleteMember(id).then(() => { setMembers(current => current.filter(item => item.id !== id)); setRecords(current => current.filter(record => record.memberId !== id)); touchUpdated() }).catch(() => setMemberMessage('Could not remove member.')) }
   const addAttendance = () => {
     const selected = members.find(item => item.id === memberId)
     if (!selected) { setAttendanceMessage('Select a member before adding attendance.'); return }
-    setRecords(current => {
-      const existing = current.find(record => record.memberId === selected.id && record.date === date)
-      if (existing) return current.map(record => record.id === existing.id ? { ...record, present: status === 'present', note: note.trim() } : record)
-      return [{ id: crypto.randomUUID(), memberId: selected.id, name: selected.name, date, present: status === 'present', note: note.trim() }, ...current]
-    })
-    setNote(''); setAttendanceMessage('Attendance saved successfully.'); touchUpdated()
+    const existing = records.find(record => record.memberId === selected.id && record.date === date)
+    const record = { id: existing?.id || crypto.randomUUID(), memberId: selected.id, name: selected.name, date, present: status === 'present', note: note.trim() }
+    createAttendance(record).then(() => {
+      setRecords(current => existing ? current.map(item => item.id === existing.id ? record : item) : [record, ...current])
+      setNote(''); setAttendanceMessage('Attendance saved successfully.'); touchUpdated()
+    }).catch(() => setAttendanceMessage('Could not save attendance. Check the database connection.'))
   }
   const exportCsv = () => { const rows = [['Name', 'Date', 'Status', 'Note'], ...records.map(r => [r.name, r.date, r.present ? 'Present' : 'Absent', r.note])]; const csv = rows.map(row => row.map(value => `"${String(value).replaceAll('"', '""')}"`).join(',')).join('\n'); const link = document.createElement('a'); link.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' })); link.download = 'jsc-ydm-attendance.csv'; link.click(); URL.revokeObjectURL(link.href) }
   const handleLogin = () => { if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) { setIsAuthed(true); setUsername(''); setPassword('') } }
 
   if (!isAuthed) return <section className="py-20"><div className="mx-auto max-w-md px-5 lg:px-8"><div className="soft-card border border-emerald-100 shadow-lg"><div className="mb-6 flex items-center gap-3"><span className="icon-box"><ShieldCheck size={20} /></span><div><p className="eyebrow">Admin access</p><h1 className="mt-1 text-2xl font-black">Sign in to continue</h1></div></div><div className="grid gap-4"><label className="field-label">Username<input value={username} onChange={e => setUsername(e.target.value)} className="field" autoComplete="username" /></label><label className="field-label">Password<input value={password} onChange={e => setPassword(e.target.value)} type="password" className="field" autoComplete="current-password" onKeyDown={e => e.key === 'Enter' && handleLogin()} /></label><button onClick={handleLogin} className="primary-btn justify-center"><LockKeyhole size={17} /> Enter admin area</button></div></div></div></section>
 
-  return <><PageHero eyebrow="Administration" title="Member and attendance management" description="Add complete member profiles, upload photos, and manage attendance records from one place." icon={<UserCog size={15} />} /><section className="py-16"><div className="mx-auto max-w-7xl px-5 lg:px-8"><div className="mb-5 flex justify-end"><button onClick={() => setIsAuthed(false)} className="rounded-xl border border-rose-200 bg-rose-50 px-4 py-2 text-sm font-bold text-rose-700 transition hover:bg-rose-100">Log out</button></div><div className="grid gap-5 lg:grid-cols-[420px_1fr]">
+  return <><PageHero eyebrow="Administration" title="Member and attendance management" description="Add complete member profiles, upload photos, and manage attendance records from one place." icon={<UserCog size={15} />} /><section className="admin-page py-10 sm:py-16"><div className="mx-auto max-w-7xl px-4 sm:px-5 lg:px-8"><div className="mb-5 flex justify-end"><button onClick={() => setIsAuthed(false)} className="rounded-xl border border-rose-200 bg-rose-50 px-4 py-2 text-sm font-bold text-rose-700 transition hover:bg-rose-100">Log out</button></div><div className="grid gap-5 lg:grid-cols-[420px_1fr]">
     <aside className="soft-card h-fit"><div className="mb-6 flex items-center gap-3"><span className="icon-box"><UserPlus size={20} /></span><div><h2 className="font-black">{editingId ? 'Edit member' : 'Add member'}</h2><p className="text-xs text-slate-500">All details appear in Attendance</p></div></div><div className="grid gap-3">
       <label className="field-label">Full name<input value={member.name} onChange={e => updateMember('name', e.target.value)} className="field" placeholder="Member name" /></label><label className="field-label">Role<input value={member.role} onChange={e => updateMember('role', e.target.value)} className="field" placeholder="e.g. Youth Leader" /></label><div className="grid gap-3 sm:grid-cols-2"><label className="field-label">Email<input type="email" value={member.email} onChange={e => updateMember('email', e.target.value)} className="field" /></label><label className="field-label">Phone<input value={member.phone} onChange={e => updateMember('phone', e.target.value)} className="field" /></label></div><label className="field-label">Date of birth<input type="date" value={member.dateOfBirth} onChange={e => updateMember('dateOfBirth', e.target.value)} className="field" /></label><label className="field-label">Address<input value={member.address} onChange={e => updateMember('address', e.target.value)} className="field" /></label><label className="field-label">About / ministry focus<textarea value={member.focus} onChange={e => updateMember('focus', e.target.value)} className="field min-h-20 resize-none" /></label><label className="field-label">Profile photo<input ref={photoInputRef} type="file" accept="image/*" onChange={uploadPhoto} className="field file:mr-3 file:rounded-lg file:border-0 file:bg-emerald-50 file:px-3 file:py-2 file:font-bold file:text-emerald-700" /></label>{member.photo && <div className="flex items-center gap-3"><img src={member.photo} alt="Selected profile" className="h-24 w-24 rounded-2xl object-cover" /><button type="button" onClick={() => { updateMember('photo', ''); if (photoInputRef.current) photoInputRef.current.value = '' }} className="rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-xs font-bold text-rose-700 transition hover:bg-rose-100">Remove photo</button></div>}<div className="flex gap-2"><button onClick={saveMember} className="primary-btn flex-1 justify-center"><Plus size={17} /> {editingId ? 'Save changes' : 'Add member'}</button>{editingId && <button onClick={() => { setEditingId(null); setMember(emptyMember); if (photoInputRef.current) photoInputRef.current.value = ''; setMemberMessage('') }} className="secondary-btn">Cancel</button>}</div>{memberMessage && <p className="text-sm text-emerald-700">{memberMessage}</p>}
     </div></aside>
