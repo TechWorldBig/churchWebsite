@@ -35,7 +35,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="bg-[#071f19] text-white"><PanoramaExperience /></section>
+      <section className="bg-[#071f19] pt-20 text-white sm:pt-24"><div className="mx-auto max-w-7xl px-5 pb-8 lg:px-8"><p className="eyebrow text-[#e3bc62]">Explore our place</p><h2 className="mt-3 max-w-3xl text-4xl font-black tracking-tight sm:text-5xl">Experience the JSC campus through a 360°-inspired journey.</h2></div><PanoramaExperience /></section>
 
       <section className="bg-white py-24"><div className="mx-auto max-w-7xl px-5 lg:px-8"><div className="flex flex-col justify-between gap-5 md:flex-row md:items-end"><div><p className="eyebrow">Ways to grow</p><h2 className="section-title">Programs for every<br/>step of the journey.</h2></div><Link to="/programs" className="secondary-dark-btn">View all programs <ArrowRight size={17}/></Link></div><div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">{programs.slice(0, 3).map(program => <article key={program.id} className="soft-card"><p className="text-xs font-bold uppercase tracking-[.16em] text-emerald-700">{program.schedule}</p><h3 className="mt-3 text-xl font-black">{program.title}</h3><p className="mt-3 text-sm leading-7 text-slate-600">{program.description}</p></article>)}</div></div></section>
 
