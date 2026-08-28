@@ -41,6 +41,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   .admin-page table { font-size: .8rem; }
   .admin-page th, .admin-page td { white-space: nowrap; }
   .admin-page .min-w-\[700px\] { min-width: 620px; }
+  #panorama-stage { height: min(60vw, 420px); min-height: 240px; }
+  #panorama-stage > img { object-fit: contain; background: #031611; }
 }
 
 @media (min-width: 640px) and (max-width: 1023px) {
