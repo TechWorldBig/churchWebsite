@@ -21,9 +21,7 @@ export default function Offering() {
                   Meaningful verse
                 </div>
                 <h2 className="offering-verse mt-6 text-3xl font-black leading-tight sm:text-4xl">
-                  "ஒவ்வொருவனும் தன் மனதில் தீர்மானித்தபடியே கொடுக்கட்டும்;
-                  மனக்கசப்போடு அல்ல, கட்டாயத்தோடும் அல்ல; ஏனெனில் தேவன்
-                  மகிழ்ச்சியுடன் கொடுப்பவனை நேசிக்கிறார்."
+                  "அவனவன் விசனமாயுமல்ல, கட்டாயமாயுமல்ல, தன் மனதில் நியமித்தபடியே கொடுக்கக்கடவன்; உற்சாகமாய்க் கொடுக்கிறவனிடத்தில் தேவன் பிரியமாயிருக்கிறார்."
                 </h2>
                 <p className="mt-5 text-sm font-semibold uppercase tracking-[0.16em] text-white/50">
                   2 Corinthians 9:7
