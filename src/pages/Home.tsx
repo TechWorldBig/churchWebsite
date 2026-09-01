@@ -18,7 +18,7 @@ export default function Home() {
         <div className="absolute inset-0 z-[1] bg-gradient-to-r from-[#041511]/80 via-[#041511]/45 to-transparent" />
         <div className="absolute inset-0 z-[1] bg-gradient-to-t from-[#041511]/80 via-transparent to-[#041511]/20" />
         <div className="relative z-10 mx-auto w-full max-w-7xl px-5 py-24 lg:px-8">
-          <motion.div initial={{ opacity: 0, y: 35 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .8 }} className="max-w-3xl">
+          <motion.div initial={{ opacity: 0, y: 35 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .8 }} className="home-hero-content max-w-3xl">
             <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#e3bc62]/30 bg-[#e3bc62]/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.2em] text-[#f0d28d]"><Sparkles size={14}/> Faith • Fellowship • Service</div>
             <h1 className="text-[clamp(2.8rem,12vw,5rem)] font-black leading-[.98] tracking-[-.04em] sm:text-7xl lg:text-8xl">A generation<br/><span className="text-[#e3bc62]">growing in church.</span></h1>
             <p className="mt-6 max-w-2xl text-sm leading-7 text-white/65 sm:mt-7 sm:text-lg sm:leading-8">JSC Youth Development Ministry is a place for young people to worship, learn, serve, lead and build friendships that strengthen faith for life.</p>
@@ -28,7 +28,7 @@ export default function Home() {
         <div className="absolute bottom-7 right-6 hidden items-center gap-3 text-xs uppercase tracking-[0.18em] text-white/45 md:flex"><span className="h-px w-12 bg-white/30"/> Scroll to explore</div>
       </section>
 
-      <section className="bg-stone-50 py-24">
+      <section className="home-purpose bg-stone-50 py-24">
         <div className="mx-auto max-w-7xl px-5 lg:px-8">
           <div className="grid gap-12 lg:grid-cols-[.8fr_1.2fr] lg:items-end"><div><p className="eyebrow">Our purpose</p><h2 className="section-title">Rooted in faith.<br/>Ready to serve.</h2></div><p className="max-w-2xl text-lg leading-8 text-slate-600">We want every young person to know Christ personally, discover their gifts, grow in character and become a positive influence in church, family and community.</p></div>
           <div className="mt-14 grid gap-5 md:grid-cols-3">{pillars.map((p, i) => <motion.article key={p.title} initial={{opacity:0,y:24}} whileInView={{opacity:1,y:0}} viewport={{once:true}} transition={{delay:i*.08}} className="soft-card"><span className="icon-box"><p.icon size={23}/></span><h3 className="mt-6 text-xl font-black">{p.title}</h3><p className="mt-3 text-sm leading-7 text-slate-600">{p.text}</p></motion.article>)}</div>
@@ -37,9 +37,9 @@ export default function Home() {
 
       <section className="bg-[#071f19] pt-20 text-white sm:pt-24"><div className="mx-auto max-w-7xl px-5 pb-8 lg:px-8"><p className="eyebrow text-[#e3bc62]">Explore our place</p><h2 className="mt-3 max-w-3xl text-4xl font-black tracking-tight sm:text-5xl">Experience the JSC campus through a 360°-inspired journey.</h2></div><PanoramaExperience /></section>
 
-      <section className="bg-white py-24"><div className="mx-auto max-w-7xl px-5 lg:px-8"><div className="flex flex-col justify-between gap-5 md:flex-row md:items-end"><div><p className="eyebrow">Ways to grow</p><h2 className="section-title">Programs for every<br/>step of the journey.</h2></div><Link to="/programs" className="secondary-dark-btn">View all programs <ArrowRight size={17}/></Link></div><div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">{programs.slice(0, 3).map(program => <article key={program.id} className="soft-card"><p className="text-xs font-bold uppercase tracking-[.16em] text-emerald-700">{program.schedule}</p><h3 className="mt-3 text-xl font-black">{program.title}</h3><p className="mt-3 text-sm leading-7 text-slate-600">{program.description}</p></article>)}</div></div></section>
+      <section className="bg-white py-24"><div className="mx-auto max-w-7xl px-5 lg:px-8"><div className="flex flex-col justify-between gap-5 md:flex-row md:items-end"><div><p className="eyebrow">Ways to grow</p><h2 className="section-title">Programs for every<br/>step of the journey.</h2></div><Link to="/programs" className="secondary-dark-btn">View all programs <ArrowRight size={17}/></Link></div><div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">{programs.slice(0, 3).map(program => <article key={program.id} className="program-card soft-card"><p className="text-xs font-bold uppercase tracking-[.16em] text-emerald-700">{program.schedule}</p><h3 className="mt-3 text-xl font-black">{program.title}</h3><p className="mt-3 text-sm leading-7 text-slate-600">{program.description}</p></article>)}</div></div></section>
 
-      <section className="bg-[#e3bc62] py-20"><div className="mx-auto flex max-w-7xl flex-col justify-between gap-8 px-5 md:flex-row md:items-center lg:px-8"><div><p className="text-xs font-bold uppercase tracking-[.2em] text-[#071f19]/55">Stay connected</p><h2 className="mt-2 text-4xl font-black tracking-tight text-[#071f19]">Be part of the next gathering.</h2></div><Link to="/attendance" className="dark-btn">View attendance <ArrowRight size={18}/></Link></div></section>
+      <section className="home-cta bg-[#e3bc62] py-20"><div className="mx-auto flex max-w-7xl flex-col justify-between gap-8 px-5 md:flex-row md:items-center lg:px-8"><div><p className="text-xs font-bold uppercase tracking-[.2em] text-[#071f19]/55">Stay connected</p><h2 className="mt-2 text-4xl font-black tracking-tight text-[#071f19]">Be part of the next gathering.</h2></div><Link to="/attendance" className="dark-btn">View attendance <ArrowRight size={18}/></Link></div></section>
     </>
   )
 }
