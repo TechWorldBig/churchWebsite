@@ -66,7 +66,7 @@ export default function Layout({ children }: { children: ReactNode }) {
       <main>{children}</main>
 
       <footer className="site-footer bg-[#041511] text-white">
-        <div className="mx-auto grid max-w-7xl gap-6 px-5 py-7 md:grid-cols-[1.4fr_1fr_1fr] lg:px-8">
+        <div className="mx-auto grid max-w-7xl gap-5 px-5 py-5 md:grid-cols-[1.4fr_1fr_1fr] lg:px-8">
           <div>
             <div className="mb-3 flex items-center gap-3 text-sm font-black sm:text-base"><span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-[#e3bc62] text-[#071f19]"><Cross size={19} /></span><span>JSC Youth Development Ministry</span></div>
             <p className="max-w-md text-sm leading-7 text-white/55">A Christ-centered youth community growing together through worship, Scripture, fellowship, service and leadership.</p>

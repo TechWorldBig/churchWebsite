@@ -77,7 +77,8 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   .site-header .menu-toggle { min-height: 2.75rem; min-width: 2.75rem; }
   .mobile-nav { max-height: calc(100svh - 4rem); overflow-y: auto; }
   .mobile-nav a { min-height: 3rem; display: flex; align-items: center; }
-  .site-footer > div:first-child { padding-top: 1.25rem; padding-bottom: 1.25rem; }
+  .site-footer > div:first-child { grid-template-columns: 1fr 1fr; gap: 1.25rem; padding-top: 1rem; padding-bottom: 1rem; }
+  .site-footer > div:first-child > div:first-child { grid-column: 1 / -1; }
   .site-footer .social-icon { min-height: 2.75rem; min-width: 2.75rem; }
   .page-hero { padding-top: 6rem; padding-bottom: 2.5rem; }
   .home-cta { padding-top: 2.75rem; padding-bottom: 2.75rem; }
@@ -128,7 +129,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   main > section + section div.h-64 { height: 12rem; }
   footer .grid { gap: 1.75rem; }
   footer { font-size: .95rem; }
-  footer .grid { grid-template-columns: 1fr; }
+  footer .grid { grid-template-columns: 1fr 1fr; }
   #panorama-stage { height: calc(min(60vw, 420px) + 96px); min-height: 336px; }
   #panorama-stage > img { height: min(60vw, 420px); bottom: auto; object-fit: contain; background: #031611; }
   #panorama-stage > div:nth-of-type(1), #panorama-stage > div:nth-of-type(2) { height: min(60vw, 420px); bottom: auto; }
@@ -156,7 +157,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
 @media (min-width: 1024px) {
   .site-header nav a { letter-spacing: .01em; }
-  .site-footer > div:first-child { padding-top: 1rem; padding-bottom: 1rem; }
+  .site-footer > div:first-child { gap: 1.25rem; padding-top: .75rem; padding-bottom: .75rem; }
   .page-hero h1 { max-width: 56rem; }
   .home-cta { padding-top: 1.75rem; padding-bottom: 1.75rem; }
   main > section:not(.page-hero) { padding-top: 5rem; padding-bottom: 5rem; }
