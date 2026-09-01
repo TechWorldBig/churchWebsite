@@ -1,5 +1,5 @@
 import PageHero from '../components/PageHero'
-import { HeartHandshake, Sparkles } from 'lucide-react'
+import { Download, HeartHandshake, Sparkles } from 'lucide-react'
 
 export default function Offering() {
   return (
@@ -32,11 +32,20 @@ export default function Offering() {
               </div>
 
               <div className="offering-qr-panel grid place-items-center bg-stone-50 p-5 sm:p-8">
-                <img
-                  src="/assets/offering-screenshot.jpeg"
-                  alt="Offering QR code screenshot"
-                  className="offering-qr max-h-[760px] w-full rounded-[1.5rem] object-contain shadow-xl"
-                />
+                <div className="grid w-full justify-items-center gap-4">
+                  <img
+                    src="/assets/offering-screenshot.jpeg"
+                    alt="Offering QR code screenshot"
+                    className="offering-qr max-h-[760px] w-full rounded-[1.5rem] object-contain shadow-xl"
+                  />
+                  <a
+                    href="/assets/offering-screenshot.jpeg"
+                    download="offering-qr-code.jpeg"
+                    className="dark-btn w-full max-w-xs"
+                  >
+                    <Download size={17} /> Download QR code
+                  </a>
+                </div>
               </div>
             </div>
           </div>
