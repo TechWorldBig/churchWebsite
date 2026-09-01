@@ -2,11 +2,13 @@
 
 :root { font-family: "Avenir Next", Avenir, ui-sans-serif, system-ui, sans-serif; color: #17211f; background: #faf9f6; font-synthesis: none; text-rendering: optimizeLegibility; }
 * { box-sizing: border-box; }
+img { display: block; max-width: 100%; }
 html { scroll-behavior: smooth; }
 body { margin: 0; min-width: 320px; background: radial-gradient(circle at 10% 10%, rgba(227,188,98,.08), transparent 28rem), #faf9f6; }
 body { overflow-x: hidden; }
 button, a, input, textarea { font: inherit; }
 button, a { -webkit-tap-highlight-color: transparent; }
+button, a { touch-action: manipulation; }
 button, a, input, textarea, select { outline: none; }
 button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible { outline: 3px solid rgba(227,188,98,.85); outline-offset: 3px; }
 ::selection { background: #e3bc62; color: #071f19; }
@@ -27,6 +29,13 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   .footer-link { @apply transition hover:translate-x-1 hover:text-[#e3bc62]; }
   .field-label { @apply grid gap-2 text-xs font-bold uppercase tracking-[0.12em] text-slate-500; }
   .field { @apply w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-medium normal-case tracking-normal text-slate-900 outline-none transition placeholder:font-normal focus:border-emerald-700 focus:bg-white focus:ring-2 focus:ring-emerald-700/10; }
+  .content-wrap { @apply mx-auto w-full max-w-7xl px-4 sm:px-5 lg:px-8; }
+}
+
+@media (max-width: 1279px) and (min-width: 1024px) {
+  .site-header nav { gap: 0; }
+  .site-header nav a { padding-left: .65rem; padding-right: .65rem; font-size: .78rem; }
+  .site-header > div { padding-left: 1rem; padding-right: 1rem; }
 }
 
 @media (max-width: 639px) {
@@ -39,6 +48,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   .page-hero { padding-top: 7rem; padding-bottom: 3rem; }
   .page-hero h1 { font-size: clamp(2rem, 10vw, 3rem); line-height: 1.05; }
   .page-hero p { max-width: none; font-size: .95rem; line-height: 1.7; }
+  .page-hero .relative { padding-left: 1.25rem; padding-right: 1.25rem; }
   main > section:not(.page-hero) { padding-top: 3.5rem; padding-bottom: 3.5rem; }
   main > section + section { padding-top: 3.5rem; padding-bottom: 3.5rem; }
   main h2.text-4xl { font-size: 2rem; line-height: 1.1; }
@@ -49,6 +59,11 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   .primary-btn, .secondary-btn, .dark-btn { @apply w-full justify-center px-5 py-3.5; }
   .secondary-dark-btn { @apply w-full justify-center; }
   .field-label { @apply text-[10px] tracking-[0.1em]; }
+  .field { min-height: 3rem; }
+  .soft-card { min-width: 0; }
+  .site-footer p, .site-footer a, main p, main h1, main h2, main h3 { overflow-wrap: anywhere; }
+  .offering-verse { font-size: clamp(1.45rem, 7vw, 2rem); }
+  .offering-qr { max-height: 70svh; width: auto; max-width: 100%; }
   .admin-page .soft-card { @apply p-4; }
   .admin-page { padding-top: 2rem; padding-bottom: 3rem; }
   .admin-page > .mx-auto { width: 100%; }
@@ -89,6 +104,19 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   .soft-card { @apply p-6; }
   .admin-page .grid.lg\:grid-cols-\[420px_1fr\] { grid-template-columns: minmax(17rem, 22rem) minmax(0, 1fr); }
   .admin-gallery-inline .lg\:grid-cols-\[340px_1fr\] { grid-template-columns: minmax(16rem, 20rem) minmax(0, 1fr); }
+}
+
+@media (max-width: 767px) {
+  .site-header .group { min-width: 0; }
+  .site-header .group > span:last-child { min-width: 0; }
+  .site-header .group > span:last-child > span:first-child { white-space: nowrap; }
+  .site-footer > div:first-child { grid-template-columns: 1fr; }
+  .admin-page .grid.lg\:grid-cols-\[420px_1fr\] { grid-template-columns: minmax(0, 1fr); }
+  .admin-page .grid.md\:grid-cols-\[1fr_180px_150px_1fr_auto\] { grid-template-columns: minmax(0, 1fr); }
+  .admin-page .grid.md\:grid-cols-\[1fr_180px_150px_1fr_auto\] > .primary-btn { width: 100%; }
+  .admin-page table { min-width: 620px; }
+  .attendance-page > .mx-auto > div:last-child { grid-template-columns: minmax(0, 1fr); }
+  .offering-qr-panel { min-height: 0; }
 }
 
 @media (min-width: 1024px) {
