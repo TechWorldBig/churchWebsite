@@ -12,7 +12,7 @@ const links = [
   ['Offering', '/offering'],
   ['About', '/about'],
   ['Admin', '/admin'],
-]
+] as const
 
 export default function Layout({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false)
@@ -20,10 +20,10 @@ export default function Layout({ children }: { children: ReactNode }) {
   return (
     <div className="min-h-screen bg-stone-50 text-slate-900">
       <header className="site-header fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-[#071f19]/88 text-white backdrop-blur-xl">
-        <div className="mx-auto flex h-[4.5rem] max-w-7xl items-center justify-between px-4 sm:h-20 sm:px-5 lg:px-8">
+        <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:h-14 sm:px-5 lg:px-8">
           <Link to="/" className="group flex items-center gap-3" onClick={() => setOpen(false)}>
-            <span className="grid h-10 w-10 place-items-center rounded-xl bg-[#e3bc62] text-[#071f19] shadow-lg shadow-black/15 transition group-hover:rotate-3 sm:h-11 sm:w-11 sm:rounded-2xl">
-              <Cross size={22} strokeWidth={2.4} />
+            <span className="grid h-9 w-9 place-items-center rounded-xl bg-[#e3bc62] text-[#071f19] shadow-lg shadow-black/15 transition group-hover:rotate-3 sm:h-10 sm:w-10 sm:rounded-2xl">
+              <Cross size={20} strokeWidth={2.4} />
             </span>
             <span className="leading-tight">
               <span className="block text-sm font-black tracking-[0.08em] sm:text-base">JSC YDM</span>
@@ -37,7 +37,7 @@ export default function Layout({ children }: { children: ReactNode }) {
                 key={to}
                 to={to}
                 end={to === '/'}
-                className={({ isActive }) => `rounded-full px-4 py-2 text-sm font-semibold transition ${isActive ? 'bg-white text-[#071f19]' : 'text-white/75 hover:bg-white/10 hover:text-white'}`}
+                className={({ isActive }) => `rounded-full px-3 py-1.5 text-xs font-semibold transition ${isActive ? 'bg-white text-[#071f19]' : 'text-white/75 hover:bg-white/10 hover:text-white'}`}
               >
                 {label}
               </NavLink>
@@ -66,9 +66,9 @@ export default function Layout({ children }: { children: ReactNode }) {
       <main>{children}</main>
 
       <footer className="site-footer bg-[#041511] text-white">
-        <div className="mx-auto grid max-w-7xl gap-10 px-5 py-14 md:grid-cols-[1.4fr_1fr_1fr] lg:px-8">
+        <div className="mx-auto grid max-w-7xl gap-6 px-5 py-7 md:grid-cols-[1.4fr_1fr_1fr] lg:px-8">
           <div>
-            <div className="mb-4 flex items-center gap-3 font-black"><span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-[#e3bc62] text-[#071f19]"><Cross size={21} /></span><span>JSC Youth Development Ministry</span></div>
+            <div className="mb-3 flex items-center gap-3 text-sm font-black sm:text-base"><span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-[#e3bc62] text-[#071f19]"><Cross size={19} /></span><span>JSC Youth Development Ministry</span></div>
             <p className="max-w-md text-sm leading-7 text-white/55">A Christ-centered youth community growing together through worship, Scripture, fellowship, service and leadership.</p>
           </div>
           <div>
@@ -80,7 +80,7 @@ export default function Layout({ children }: { children: ReactNode }) {
             <div className="flex gap-3" aria-label="Social media"><span className="social-icon"><Instagram size={18} /></span><span className="social-icon"><Youtube size={18} /></span></div>
           </div>
         </div>
-        <div className="border-t border-white/10 px-5 py-5 text-center text-xs text-white/35">© {new Date().getFullYear()} JSC Youth Development Ministry. Faith • Fellowship • Service.</div>
+        <div className="border-t border-white/10 px-5 py-4 text-center text-xs text-white/35">© {new Date().getFullYear()} JSC Youth Development Ministry. Faith • Fellowship • Service.</div>
       </footer>
     </div>
   )

@@ -2,11 +2,12 @@
 
 :root { font-family: "Avenir Next", Avenir, ui-sans-serif, system-ui, sans-serif; color: #17211f; background: #faf9f6; font-synthesis: none; text-rendering: optimizeLegibility; --forest: #071f19; --forest-deep: #041511; --gold: #e3bc62; --ink: #17211f; --cream: #faf9f6; }
 * { box-sizing: border-box; }
+.grid > * { min-width: 0; }
 img { display: block; max-width: 100%; }
 html { scroll-behavior: smooth; }
 body { margin: 0; min-width: 320px; background: radial-gradient(circle at 10% 10%, rgba(227,188,98,.13), transparent 28rem), radial-gradient(circle at 90% 35%, rgba(16,185,129,.06), transparent 32rem), #faf9f6; }
 body { overflow-x: hidden; }
-button, a, input, textarea { font: inherit; }
+button, a, input, textarea, select { font: inherit; }
 button, a { -webkit-tap-highlight-color: transparent; }
 button, a { touch-action: manipulation; }
 button, a, input, textarea, select { outline: none; }
@@ -56,6 +57,11 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 .site-footer::before { position: absolute; right: -10rem; top: -12rem; height: 28rem; width: 28rem; border: 1px solid rgba(227,188,98,.12); border-radius: 9999px; content: ""; }
 .site-footer::after { position: absolute; right: 3rem; top: 3rem; height: 8rem; width: 8rem; border: 1px solid rgba(227,188,98,.1); border-radius: 9999px; content: ""; }
 .site-footer > div { position: relative; z-index: 1; }
+.site-footer > div:first-child { padding-top: 1.25rem; padding-bottom: 1.25rem; }
+.site-footer > div:first-child > div { align-self: start; }
+.site-footer h3 { margin-bottom: .75rem; }
+.site-footer .footer-link { line-height: 1.35; }
+.site-footer p { line-height: 1.55; }
 .social-icon { transition: transform .25s ease, background-color .25s ease, color .25s ease; }
 .social-icon:hover { transform: translateY(-3px); background: rgba(227,188,98,.15); color: var(--gold); }
 .panorama-button { box-shadow: 0 10px 25px rgba(0,0,0,.18); }
@@ -67,13 +73,14 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 }
 
 @media (max-width: 639px) {
-  .site-header > div { min-height: 4.25rem; }
+  .site-header > div { min-height: 4rem; height: 4rem; }
   .site-header .menu-toggle { min-height: 2.75rem; min-width: 2.75rem; }
-  .mobile-nav { max-height: calc(100svh - 4.25rem); overflow-y: auto; }
+  .mobile-nav { max-height: calc(100svh - 4rem); overflow-y: auto; }
   .mobile-nav a { min-height: 3rem; display: flex; align-items: center; }
-  .site-footer > div:first-child { padding-top: 3rem; padding-bottom: 3rem; }
+  .site-footer > div:first-child { padding-top: 1.25rem; padding-bottom: 1.25rem; }
   .site-footer .social-icon { min-height: 2.75rem; min-width: 2.75rem; }
-  .page-hero { padding-top: 7rem; padding-bottom: 3rem; }
+  .page-hero { padding-top: 6rem; padding-bottom: 2.5rem; }
+  .home-cta { padding-top: 2.75rem; padding-bottom: 2.75rem; }
   .page-hero h1 { font-size: clamp(2rem, 10vw, 3rem); line-height: 1.05; }
   .page-hero p { max-width: none; font-size: .95rem; line-height: 1.7; }
   .page-hero .relative { padding-left: 1.25rem; padding-right: 1.25rem; }
@@ -119,7 +126,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   main > section + section img.h-56 { height: 10rem; }
   main > section + section img.h-52 { height: 11rem; }
   main > section + section div.h-64 { height: 12rem; }
-  footer .grid { gap: 2.25rem; }
+  footer .grid { gap: 1.75rem; }
   footer { font-size: .95rem; }
   footer .grid { grid-template-columns: 1fr; }
   #panorama-stage { height: calc(min(60vw, 420px) + 96px); min-height: 336px; }
@@ -149,8 +156,9 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 
 @media (min-width: 1024px) {
   .site-header nav a { letter-spacing: .01em; }
-  .site-footer > div:first-child { padding-top: 4.5rem; padding-bottom: 4.5rem; }
+  .site-footer > div:first-child { padding-top: 1rem; padding-bottom: 1rem; }
   .page-hero h1 { max-width: 56rem; }
+  .home-cta { padding-top: 1.75rem; padding-bottom: 1.75rem; }
   main > section:not(.page-hero) { padding-top: 5rem; padding-bottom: 5rem; }
   .admin-page { padding-top: 4rem; padding-bottom: 5rem; }
   .admin-page .soft-card { padding: 1.75rem; }
