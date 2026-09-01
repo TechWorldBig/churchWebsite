@@ -18,7 +18,7 @@ export default function Offering() {
               <div className="min-w-0 bg-[#071f19] p-6 text-white sm:p-10">
                 <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-bold uppercase tracking-[0.18em] text-[#e3bc62]">
                   <Sparkles size={14} />
-                  Meaningful verse
+                  Bible verse
                 </div>
                 <h2 className="offering-verse mt-6 text-3xl font-black leading-tight sm:text-4xl">
                   "அவனவன் விசனமாயுமல்ல, கட்டாயமாயுமல்ல, தன் மனதில் நியமித்தபடியே கொடுக்கக்கடவன்; உற்சாகமாய்க் கொடுக்கிறவனிடத்தில் தேவன் பிரியமாயிருக்கிறார்."
