@@ -2,6 +2,7 @@ import { type ReactNode, useState } from 'react'
 import { Menu, X, Cross, Instagram, Youtube } from 'lucide-react'
 import { Link, NavLink } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
+import ChurchAssistant from './ChurchAssistant'
 
 const links = [
   ['Home', '/'],
@@ -82,6 +83,7 @@ export default function Layout({ children }: { children: ReactNode }) {
         </div>
         <div className="border-t border-white/10 px-5 py-4 text-center text-xs text-white/35">© {new Date().getFullYear()} JSC Youth Development Ministry. Faith • Fellowship • Service.</div>
       </footer>
+      <ChurchAssistant />
     </div>
   )
 }

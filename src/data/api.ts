@@ -1,5 +1,10 @@
 import { AttendanceRecord, GalleryPhoto, Member } from './memberStore'
 
+export type AssistantTurn = {
+  role: 'user' | 'assistant'
+  content: string
+}
+
 const request = async <T>(url: string, options?: RequestInit): Promise<T> => {
   const response = await fetch(url, { headers: { 'Content-Type': 'application/json' }, ...options })
   if (!response.ok) throw new Error(`Request failed: ${response.status}`)
@@ -19,3 +24,7 @@ export const getGallery = () => request<GalleryPhoto[]>('/api/gallery')
 export const createGalleryPhoto = (photo: GalleryPhoto) => request<{ ok: boolean }>('/api/gallery', { method: 'POST', body: JSON.stringify(photo) })
 export const updateGalleryPhoto = (photo: GalleryPhoto) => request<{ ok: boolean }>('/api/gallery', { method: 'PUT', body: JSON.stringify(photo) })
 export const deleteGalleryPhoto = (id: string) => request<{ ok: boolean }>('/api/gallery', { method: 'DELETE', body: JSON.stringify({ id }) })
+export const askChurchAssistant = (question: string, name: string, language: 'en' | 'ta' | 'ml', history: AssistantTurn[]) => request<{ answer: string }>('/api/assistant', {
+  method: 'POST',
+  body: JSON.stringify({ question, name, language, history }),
+})

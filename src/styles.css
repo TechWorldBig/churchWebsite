@@ -65,6 +65,29 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 .social-icon { transition: transform .25s ease, background-color .25s ease, color .25s ease; }
 .social-icon:hover { transform: translateY(-3px); background: rgba(227,188,98,.15); color: var(--gold); }
 .panorama-button { box-shadow: 0 10px 25px rgba(0,0,0,.18); }
+.church-assistant-fab {
+  right: max(1.25rem, env(safe-area-inset-right));
+  bottom: max(1.25rem, env(safe-area-inset-bottom));
+  border: 1px solid rgba(255,255,255,.35);
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+.church-assistant-panel {
+  right: max(1.25rem, env(safe-area-inset-right));
+  bottom: calc(6rem + env(safe-area-inset-bottom));
+  width: min(26rem, calc(100vw - 2.5rem));
+  height: min(34rem, calc(100dvh - 7.5rem - env(safe-area-inset-top) - env(safe-area-inset-bottom)));
+  min-height: 20rem;
+  backdrop-filter: blur(22px);
+}
+.church-assistant-messages {
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+}
+.church-assistant-message {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
 
 @media (max-width: 1279px) and (min-width: 1024px) {
   .site-header nav { gap: 0; }
@@ -98,6 +121,23 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   .field { min-height: 3rem; }
   .soft-card { min-width: 0; }
   .site-footer p, .site-footer a, main p, main h1, main h2, main h3 { overflow-wrap: anywhere; }
+  .church-assistant-fab {
+    right: max(.75rem, env(safe-area-inset-right));
+    bottom: max(.75rem, env(safe-area-inset-bottom));
+    width: 3.5rem;
+    height: 3.5rem;
+  }
+  .church-assistant-panel {
+    left: max(.5rem, env(safe-area-inset-left));
+    right: max(.5rem, env(safe-area-inset-right));
+    bottom: calc(5rem + env(safe-area-inset-bottom));
+    width: auto;
+    height: min(32rem, calc(100dvh - 6rem - env(safe-area-inset-top) - env(safe-area-inset-bottom)));
+    min-height: min(20rem, calc(100dvh - 6rem - env(safe-area-inset-top) - env(safe-area-inset-bottom)));
+    border-radius: 1rem;
+  }
+  .church-assistant-panel input { font-size: 1rem; }
+  .church-assistant-message { max-width: 88%; }
   .offering-verse { font-size: clamp(1.45rem, 7vw, 2rem); }
   .offering-qr { max-height: 70svh; width: auto; max-width: 100%; }
   .admin-page .soft-card { @apply p-4; }
