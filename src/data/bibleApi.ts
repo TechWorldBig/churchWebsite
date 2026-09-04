@@ -207,7 +207,7 @@ async function resolveLocalizedBook(bookText: string, translation: string): Prom
 export function isBibleRequest(input: string): boolean {
   const lower = input.toLocaleLowerCase()
   const reference = parseReference(input)
-  const requestsTopicAnswer = ['preaching', 'sermon', 'missionary', 'missionaries', 'topic', 'outline', 'points', 'பிரசங்க', 'மிஷனரி', 'தலைப்பு', 'പ്രസംഗ', 'മിഷനറി', 'വിഷയം']
+  const requestsTopicAnswer = ['preach', 'preaching', 'sermon', 'missionary', 'missionaries', 'topic', 'outline', 'points', 'பிரசங்க', 'மிஷனரி', 'தலைப்பு', 'പ്രസംഗ', 'മിഷനറി', 'വിഷയം']
     .some((term) => lower.includes(term))
   if (requestsTopicAnswer) return false
 
