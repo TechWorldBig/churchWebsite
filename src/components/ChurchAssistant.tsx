@@ -133,16 +133,24 @@ const assistantCopy: Record<BibleLanguage, AssistantCopy> = {
   },
 }
 
+function getMentionedLanguage(input: string): BibleLanguage | null {
+  const lower = input.toLocaleLowerCase().trim()
+  const mentioned = [
+    (lower.includes('english') ? 'en' : null),
+    (lower.includes('tamil') || lower.includes('தமிழ்') ? 'ta' : null),
+    (lower.includes('malayalam') || lower.includes('മലയാളം') ? 'ml' : null),
+  ].filter((language): language is BibleLanguage => language !== null)
+
+  return mentioned.length === 1 ? mentioned[0] : null
+}
+
 function getRequestedLanguage(input: string): BibleLanguage | null {
   const lower = input.toLocaleLowerCase().trim()
   const isLanguageCommand = ['tamil', 'malayalam', 'english', 'தமிழ்', 'മലയാളം'].includes(lower)
     || ['continue', 'speak', 'talk', 'reply', 'respond', 'language', 'switch', 'change', 'use'].some((word) => lower.includes(word))
 
   if (!isLanguageCommand) return null
-  if (lower.includes('malayalam') || lower.includes('മലയാളം')) return 'ml'
-  if (lower.includes('tamil') || lower.includes('தமிழ்')) return 'ta'
-  if (lower.includes('english')) return 'en'
-  return null
+  return getMentionedLanguage(input)
 }
 
 function normalizeName(value: string): string {
@@ -401,11 +409,15 @@ export default function ChurchAssistant() {
       return
     }
 
+    const inlineLanguage = getMentionedLanguage(text)
+    const responseLanguage = inlineLanguage ?? preferredLanguage
+    if (inlineLanguage && inlineLanguage !== preferredLanguage) setPreferredLanguage(inlineLanguage)
+
     if (isSensitiveRequest(text)) {
       setMessages((current) => [
         ...current,
         userMessage,
-        { id: crypto.randomUUID(), role: 'bot', text: assistantCopy[preferredLanguage].sensitiveRequest },
+        { id: crypto.randomUUID(), role: 'bot', text: assistantCopy[responseLanguage].sensitiveRequest },
       ])
       return
     }
@@ -414,7 +426,7 @@ export default function ChurchAssistant() {
       setMessages((current) => [
         ...current,
         userMessage,
-        { id: crypto.randomUUID(), role: 'bot', text: assistantCopy[preferredLanguage].attendanceCorrection },
+        { id: crypto.randomUUID(), role: 'bot', text: assistantCopy[responseLanguage].attendanceCorrection },
       ])
       return
     }
@@ -424,7 +436,7 @@ export default function ChurchAssistant() {
     const bibleRequest = isBibleRequest(text)
     if (attendanceRequest || memberRequest || bibleRequest) {
       const pendingId = crypto.randomUUID()
-      const copy = assistantCopy[preferredLanguage]
+      const copy = assistantCopy[responseLanguage]
       const pendingText = attendanceRequest
         ? copy.checkingAttendance
         : memberRequest
@@ -434,22 +446,22 @@ export default function ChurchAssistant() {
       setMessages((current) => [...current, userMessage, { id: pendingId, role: 'bot', text: pendingText }])
 
       const reply = attendanceRequest
-        ? await buildAttendanceReply(text, name, preferredLanguage)
+        ? await buildAttendanceReply(text, name, responseLanguage)
         : memberRequest
-          ? await buildMemberReply(text, name, preferredLanguage)
-          : await getBibleReply(text, preferredLanguage)
+          ? await buildMemberReply(text, name, responseLanguage)
+          : await getBibleReply(text, responseLanguage)
       setMessages((current) => current.map((message) => message.id === pendingId ? { ...message, text: reply } : message))
       setIsReplying(false)
       return
     }
 
     const pendingId = crypto.randomUUID()
-    const copy = assistantCopy[preferredLanguage]
+    const copy = assistantCopy[responseLanguage]
     setIsReplying(true)
     setMessages((current) => [...current, userMessage, { id: pendingId, role: 'bot', text: copy.thinking }])
 
     try {
-      const { answer } = await askChurchAssistant(text, name, preferredLanguage, aiHistory)
+      const { answer } = await askChurchAssistant(text, name, responseLanguage, aiHistory)
       setAiHistory((current) => [
         ...current,
         { role: 'user', content: text },
