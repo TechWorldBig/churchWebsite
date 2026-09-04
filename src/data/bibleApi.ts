@@ -221,6 +221,7 @@ export function isBibleRequest(input: string): boolean {
     || lower.includes('scripture')
     || lower.includes('வசனம்')
     || lower.includes('വചനം')
+  if (mentionsVerse && asksForExplanation && reference === null) return true
   return mentionsVerse && !asksForExplanation
 }
 
