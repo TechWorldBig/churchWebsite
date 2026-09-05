@@ -1,24 +1,15 @@
-const SESSION_KEY = 'jsc-ydm-admin-session'
-const SESSION_LENGTH = 24 * 60 * 60 * 1000
+type AdminSession = { authenticated: boolean; expiresAt: number | null }
 
-const readExpiry = () => Number(sessionStorage.getItem(SESSION_KEY) || 0)
-
-export const hasAdminSession = () => {
-  const expiry = readExpiry()
-  if (expiry > Date.now()) return true
-  clearAdminSession()
-  return false
+async function sessionRequest(method: string, body?: unknown): Promise<AdminSession> {
+  const response = await fetch('/api/auth', {
+    method, credentials: 'same-origin', headers: { 'Content-Type': 'application/json' },
+    body: body === undefined ? undefined : JSON.stringify(body),
+  })
+  const result = await response.json()
+  if (!response.ok) throw new Error(result.error || 'Sign-in is temporarily unavailable.')
+  return result
 }
 
-export const getAdminSessionExpiry = () => readExpiry()
-
-export const startAdminSession = () => {
-  const expiry = Date.now() + SESSION_LENGTH
-  sessionStorage.setItem(SESSION_KEY, String(expiry))
-  window.dispatchEvent(new Event('jsc-admin-session'))
-}
-
-export const clearAdminSession = () => {
-  sessionStorage.removeItem(SESSION_KEY)
-  window.dispatchEvent(new Event('jsc-admin-session'))
-}
+export const getAdminSession = () => sessionRequest('GET')
+export const startAdminSession = (username: string, password: string) => sessionRequest('POST', { username, password })
+export const clearAdminSession = () => sessionRequest('DELETE')

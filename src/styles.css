@@ -213,3 +213,25 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }
+
+/* Responsive interaction and accessibility baseline. */
+button { min-width: 44px; min-height: 44px; }
+button:disabled { cursor: not-allowed; opacity: .65; }
+input, select, textarea { min-width: 0; }
+.site-header nav a { min-height: 44px; display: inline-flex; align-items: center; }
+.skip-link { position: fixed; top: .5rem; left: .5rem; z-index: 100; padding: .75rem 1rem; background: #fff; color: #071f19; border-radius: .5rem; transform: translateY(-200%); }
+.skip-link:focus { transform: translateY(0); }
+#main-content { scroll-margin-top: 5rem; }
+.mobile-nav { max-height: calc(100dvh - 4rem); overflow-y: auto; }
+.church-assistant-panel { min-height: 0; }
+@media (max-width: 1023px) {
+  input, select, textarea, .field { font-size: 16px; }
+  .admin-page .grid.lg\:grid-cols-\[420px_1fr\], .admin-gallery-inline .lg\:grid-cols-\[340px_1fr\] { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 639px) {
+  .footer-link { min-height: 44px; display: flex; align-items: center; }
+}
+@media (max-height: 500px) {
+  .church-assistant-panel { top: max(.5rem, env(safe-area-inset-top)); bottom: .5rem; height: auto; min-height: 0; }
+  .church-assistant-fab:has(+ .church-assistant-panel) { visibility: hidden; }
+}

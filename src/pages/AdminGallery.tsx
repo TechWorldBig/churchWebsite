@@ -31,6 +31,7 @@ export default function AdminGallery() {
   const upload = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (!file) return
+    if (file.size > 2_000_000 || !['image/jpeg', 'image/png', 'image/webp', 'image/gif'].includes(file.type)) { setMessage('Choose a JPG, PNG, WebP or GIF image under 2 MB.'); return }
 
     const reader = new FileReader()
     reader.onload = () => setPhoto(current => ({ ...current, photo: String(reader.result) }))
@@ -91,7 +92,7 @@ export default function AdminGallery() {
           <div className="grid gap-3">
             <label className="field-label">
               Photo
-              <input ref={inputRef} type="file" accept="image/*" onChange={upload} className="field file:mr-3 file:rounded-lg file:border-0 file:bg-emerald-50 file:px-3 file:py-2 file:font-bold file:text-emerald-700" />
+              <input ref={inputRef} type="file" accept="image/jpeg,image/png,image/webp,image/gif" onChange={upload} className="field file:mr-3 file:rounded-lg file:border-0 file:bg-emerald-50 file:px-3 file:py-2 file:font-bold file:text-emerald-700" />
             </label>
             {photo.photo && <img src={photo.photo} alt="Selected event" className="h-36 w-full rounded-xl object-cover" />}
             <label className="field-label">

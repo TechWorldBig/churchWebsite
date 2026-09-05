@@ -1,14 +1,19 @@
+import { authorizeMutation } from './_lib/security.js'
+import { readMutation } from './_lib/validation.js'
 import { ensureSchema, getSql, sendError } from './_lib/db.js'
 
 export default async function handler(req: any, res: any) {
+  res.setHeader?.('Cache-Control', 'no-store')
   try {
+    if (req.method !== 'GET' && !await authorizeMutation(req, res)) return
+    const body = req.method === 'GET' ? null : readMutation(req, res, 'gallery')
+    if (req.method !== 'GET' && !body) return
     await ensureSchema()
     const sql = getSql()
     if (req.method === 'GET') {
       const rows = await sql`SELECT id, photo, date, description FROM gallery_photos ORDER BY date DESC, created_at DESC`
       return res.status(200).json(rows)
     }
-    const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body
     if (req.method === 'POST') {
       await sql`INSERT INTO gallery_photos (id, photo, date, description) VALUES (${body.id}, ${body.photo}, ${body.date}, ${body.description || ''})`
     } else if (req.method === 'PUT') {

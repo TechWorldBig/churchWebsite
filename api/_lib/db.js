@@ -1,10 +1,9 @@
 import { neon } from '@neondatabase/serverless'
 
-const connectionString = process.env.DATABASE_URL || process.env.POSTGRES_URL || (process.env.PGHOST && process.env.PGUSER && process.env.PGPASSWORD && process.env.PGDATABASE
+export function getSql() {
+  const connectionString = process.env.DATABASE_URL || process.env.POSTGRES_URL || (process.env.PGHOST && process.env.PGUSER && process.env.PGPASSWORD && process.env.PGDATABASE
   ? `postgresql://${encodeURIComponent(process.env.PGUSER)}:${encodeURIComponent(process.env.PGPASSWORD)}@${process.env.PGHOST}/${process.env.PGDATABASE}?sslmode=require`
   : '')
-
-export function getSql() {
   if (!connectionString) throw new Error('DATABASE_URL or POSTGRES_URL is not configured')
   return neon(connectionString)
 }
@@ -55,6 +54,6 @@ export async function ensureSchema() {
 }
 
 export function sendError(res, error) {
-  console.error(error)
+  console.error('Database request failed')
   res.status(500).json({ error: 'Database request failed' })
 }

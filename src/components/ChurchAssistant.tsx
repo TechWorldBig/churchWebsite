@@ -1,3 +1,4 @@
+import { isSensitiveRequest, isInstructionOverride, SENSITIVE_REPLY, OUT_OF_SCOPE_REPLY } from '../../shared/assistantPolicy'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Bird, Bot, Send, X } from 'lucide-react'
 import { askChurchAssistant, getAttendance, getMembers } from '../data/api'
@@ -57,14 +58,14 @@ const assistantCopy: Record<BibleLanguage, AssistantCopy> = {
         ? `Not bad! ${name}'s chair would still like a few more visits.`
         : `Looks like ${name}'s chair has started a missing-person prayer!`,
     attendanceCorrection: 'Please inform the attendance admin Kabin.',
-    sensitiveRequest: 'Nice try! That information is locked away. You are not allowed to check that.',
+    sensitiveRequest: SENSITIVE_REPLY,
     present: 'Present',
     absent: 'Absent',
     note: 'Note',
     checkingAttendance: 'Checking the attendance record...',
     checkingMember: 'Checking the YDM member register...',
     lookingUpBible: 'Looking up that Bible passage...',
-    thinking: 'Thinking and checking relevant sources...',
+    thinking: 'Preparing your answer...',
     assistantUnavailable: 'I could not answer that question right now. Please try again in a moment.',
     placeholder: 'Ask a question...',
     memberSummary: (name, role) => `${name} is a YDM member. Position: ${role}.`,
@@ -86,7 +87,7 @@ const assistantCopy: Record<BibleLanguage, AssistantCopy> = {
         ? `பரவாயில்லை! ${name}-ன் நாற்காலி இன்னும் சில வருகைகளை எதிர்பார்க்கிறது.`
         : `${name}-ஐ காணாமல் நாற்காலியே ஜெபிக்க ஆரம்பித்துவிட்டது!`,
     attendanceCorrection: 'தயவுசெய்து வருகைப்பதிவு நிர்வாகி Kabin-க்கு தெரிவிக்கவும்.',
-    sensitiveRequest: 'நல்ல முயற்சி! அந்தத் தகவல் பாதுகாப்பாகப் பூட்டப்பட்டுள்ளது. அதைச் சரிபார்க்க உங்களுக்கு அனுமதி இல்லை.',
+    sensitiveRequest: SENSITIVE_REPLY,
     present: 'வந்திருந்தார்',
     absent: 'வரவில்லை',
     note: 'குறிப்பு',
@@ -115,7 +116,7 @@ const assistantCopy: Record<BibleLanguage, AssistantCopy> = {
         ? `മോശമല്ല! ${name}-ന്റെ കസേര ഇനിയും കുറച്ച് സന്ദർശനങ്ങൾ പ്രതീക്ഷിക്കുന്നു.`
         : `${name}-നെ കാണാതെ കസേര പോലും പ്രാർത്ഥിക്കാൻ തുടങ്ങി!`,
     attendanceCorrection: 'ദയവായി ഹാജർ അഡ്മിൻ Kabin-നെ അറിയിക്കുക.',
-    sensitiveRequest: 'നല്ല ശ്രമം! ആ വിവരം സുരക്ഷിതമായി പൂട്ടിയിരിക്കുന്നു. അത് പരിശോധിക്കാൻ നിങ്ങൾക്ക് അനുമതിയില്ല.',
+    sensitiveRequest: SENSITIVE_REPLY,
     present: 'ഹാജർ',
     absent: 'ഹാജരായില്ല',
     note: 'കുറിപ്പ്',
@@ -218,33 +219,6 @@ function isAttendanceCorrectionRequest(input: string): boolean {
     || correctionTerms.some((term) => normalized.includes(term))
 }
 
-function isSensitiveRequest(input: string): boolean {
-  const lower = input.toLocaleLowerCase()
-  return [
-    'api key',
-    'apikey',
-    'secret key',
-    'private key',
-    'access key',
-    'access token',
-    'auth token',
-    'authentication token',
-    'bearer token',
-    'password',
-    'credential',
-    'database url',
-    'database connection',
-    'connection string',
-    'openai_api_key',
-    'process.env',
-    '.env',
-    'environment variable',
-    'system prompt',
-    'developer instruction',
-    'internal instruction',
-  ].some((term) => lower.includes(term))
-}
-
 function isMemberRequest(input: string): boolean {
   const lower = input.toLocaleLowerCase()
   const asksGeneralRole = (lower.includes('role of') || lower.includes('importance of'))
@@ -255,7 +229,7 @@ function isMemberRequest(input: string): boolean {
   return lower.includes('member')
     || lower.includes('position')
     || lower.includes('role')
-    || lower.includes('who is')
+    || (lower.includes('who is') && lower.includes('ydm'))
     || lower.includes('உறுப்பினர்')
     || lower.includes('பதவி')
     || lower.includes('அங்கம்')
@@ -388,6 +362,16 @@ export default function ChurchAssistant() {
 
     const userMessage: Message = { id: crypto.randomUUID(), role: 'user', text }
 
+    if (isSensitiveRequest(text) || isInstructionOverride(text)) {
+      setMessages((current) => [
+        ...current,
+        userMessage,
+        { id: crypto.randomUUID(), role: 'bot', text: isSensitiveRequest(text) ? SENSITIVE_REPLY : OUT_OF_SCOPE_REPLY },
+      ])
+      setInput('')
+      return
+    }
+
     if (!name) {
       const enteredName = extractName(text)
       setName(enteredName)
@@ -413,14 +397,6 @@ export default function ChurchAssistant() {
     const responseLanguage = inlineLanguage ?? preferredLanguage
     if (inlineLanguage && inlineLanguage !== preferredLanguage) setPreferredLanguage(inlineLanguage)
 
-    if (isSensitiveRequest(text)) {
-      setMessages((current) => [
-        ...current,
-        userMessage,
-        { id: crypto.randomUUID(), role: 'bot', text: assistantCopy[responseLanguage].sensitiveRequest },
-      ])
-      return
-    }
 
     if (isAttendanceCorrectionRequest(text)) {
       setMessages((current) => [
@@ -487,7 +463,7 @@ export default function ChurchAssistant() {
       </button>
 
       {open && (
-        <div className="church-assistant-panel fixed z-[70] flex flex-col overflow-hidden rounded-3xl border border-white/15 bg-[#061914] text-white shadow-[0_24px_70px_rgba(4,21,17,.4)]">
+        <div role="dialog" aria-label="YDM assistant" onKeyDown={(event) => { if (event.key === 'Escape') { setOpen(false); document.querySelector<HTMLButtonElement>('.church-assistant-fab')?.focus() } }} className="church-assistant-panel fixed z-[70] flex flex-col overflow-hidden rounded-3xl border border-white/15 bg-[#061914] text-white shadow-[0_24px_70px_rgba(4,21,17,.4)]">
           <div className="flex min-w-0 items-center justify-between border-b border-white/10 px-4 py-3">
             <div className="flex min-w-0 flex-1 items-center gap-3">
               <span className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-[#e3bc62] text-[#071f19]">
@@ -502,7 +478,7 @@ export default function ChurchAssistant() {
             </button>
           </div>
 
-          <div ref={listRef} className="church-assistant-messages min-h-0 flex-1 space-y-3 overflow-y-auto px-4 py-4">
+          <div tabIndex={0} role="log" aria-live="polite" aria-relevant="additions text" ref={listRef} className="church-assistant-messages min-h-0 flex-1 space-y-3 overflow-y-auto px-4 py-4">
             {messages.map((message) => (
               <div key={message.id} className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                 <div className={`church-assistant-message max-w-[85%] whitespace-pre-wrap rounded-2xl px-3 py-2 text-sm leading-6 ${message.role === 'user' ? 'bg-[#e3bc62] text-[#071f19]' : 'bg-white/8 text-white/88'}`}>
@@ -515,6 +491,8 @@ export default function ChurchAssistant() {
           <div className="border-t border-white/10 p-3">
             <div className="flex gap-2">
               <input
+                aria-label={name ? "Your question" : "Your name"}
+                maxLength={name ? 1500 : 100}
                 value={input}
                 onChange={(event) => setInput(event.target.value)}
                 onKeyDown={(event) => {

@@ -1,6 +1,6 @@
-import { type ReactNode, useState } from 'react'
+import { type ReactNode, useEffect, useState } from 'react'
 import { Menu, X, Cross, Instagram, Youtube } from 'lucide-react'
-import { Link, NavLink } from 'react-router-dom'
+import { Link, NavLink, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import ChurchAssistant from './ChurchAssistant'
 
@@ -17,9 +17,17 @@ const links = [
 
 export default function Layout({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false)
+  const { pathname } = useLocation()
+  useEffect(() => { setOpen(false); window.scrollTo({ top: 0, behavior: 'instant' }) }, [pathname])
+  useEffect(() => {
+    const escape = (event: KeyboardEvent) => { if (event.key === 'Escape') { setOpen(false); document.querySelector<HTMLButtonElement>('.menu-toggle')?.focus() } }
+    if (open) window.addEventListener('keydown', escape)
+    return () => window.removeEventListener('keydown', escape)
+  }, [open])
 
   return (
     <div className="min-h-screen bg-stone-50 text-slate-900">
+      <a className="skip-link" href="#main-content">Skip to content</a>
       <header className="site-header fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-[#071f19]/88 text-white backdrop-blur-xl">
         <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:h-14 sm:px-5 lg:px-8">
           <Link to="/" className="group flex items-center gap-3" onClick={() => setOpen(false)}>
@@ -64,7 +72,7 @@ export default function Layout({ children }: { children: ReactNode }) {
         </AnimatePresence>
       </header>
 
-      <main>{children}</main>
+      <main id="main-content" tabIndex={-1}>{children}</main>
 
       <footer className="site-footer bg-[#041511] text-white">
         <div className="mx-auto grid max-w-7xl gap-5 px-5 py-5 md:grid-cols-[1.4fr_1fr_1fr] lg:px-8">
@@ -78,10 +86,10 @@ export default function Layout({ children }: { children: ReactNode }) {
           </div>
           <div>
             <h3 className="mb-4 text-sm font-bold uppercase tracking-[0.18em] text-[#e3bc62]">Connect</h3>
-            <div className="flex gap-3" aria-label="Social media"><span className="social-icon"><Instagram size={18} /></span><span className="social-icon"><Youtube size={18} /></span></div>
+            <div className="flex gap-3" role="group" aria-label="Social media"><span className="social-icon"><Instagram size={18} /></span><span className="social-icon"><Youtube size={18} /></span></div>
           </div>
         </div>
-        <div className="border-t border-white/10 px-5 py-4 text-center text-xs text-white/35">© {new Date().getFullYear()} JSC Youth Development Ministry. Faith • Fellowship • Service.</div>
+        <div className="border-t border-white/10 px-5 py-4 text-center text-xs text-white/65">© {new Date().getFullYear()} JSC Youth Development Ministry. Faith • Fellowship • Service.</div>
       </footer>
       <ChurchAssistant />
     </div>

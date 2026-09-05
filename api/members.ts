@@ -1,14 +1,19 @@
+import { authorizeMutation } from './_lib/security.js'
+import { readMutation } from './_lib/validation.js'
 import { ensureSchema, getSql, sendError } from './_lib/db.js'
 
 export default async function handler(req: any, res: any) {
+  res.setHeader?.('Cache-Control', 'no-store')
   try {
+    if (req.method !== 'GET' && !await authorizeMutation(req, res)) return
+    const body = req.method === 'GET' ? null : readMutation(req, res, 'members')
+    if (req.method !== 'GET' && !body) return
     await ensureSchema()
     const sql = getSql()
     if (req.method === 'GET') {
       const rows = await sql`SELECT id, name, role, email, phone, address, date_of_birth AS "dateOfBirth", focus, photo FROM members ORDER BY created_at DESC`
       return res.status(200).json(rows)
     }
-    const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body
     if (req.method === 'POST') {
       await sql`INSERT INTO members (id, name, role, email, phone, address, date_of_birth, focus, photo) VALUES (${body.id}, ${body.name}, ${body.role || 'YDM Member'}, ${body.email || ''}, ${body.phone || ''}, ${body.address || ''}, ${body.dateOfBirth || ''}, ${body.focus || ''}, ${body.photo || ''})`
     } else if (req.method === 'PUT') {
