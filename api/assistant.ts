@@ -152,7 +152,7 @@ Scope rules:
     // An unavailable model makes every request look like a server/API-key failure.
     // Keep the production model fixed so a malformed Vercel GEMINI_MODEL
     // value cannot produce an invalid GenerateContentRequest.model.
-    const model = 'gemini-2.5-flash'
+    const model = 'gemini-3.6-flash'
     const signal = AbortSignal.timeout(45_000)
     const geminiResponse = await fetchGemini(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`, {
       method: 'POST',
