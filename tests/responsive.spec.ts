@@ -11,7 +11,10 @@ for (const path of ['/', '/members', '/gallery', '/programs', '/attendance', '/o
     page.on('pageerror', error => errors.push(error.message))
     await page.goto(path)
     await expect(page.locator('h1')).toBeVisible()
-    if (path === '/') await expect(page.locator('.home-purpose article').first()).toHaveCSS('opacity', '1')
+    if (path === '/') {
+      await expect(page.locator('.home-purpose article').first()).toHaveCSS('opacity', '1')
+      await expect(page.locator('.home-hero-content')).toHaveCSS('opacity', '1')
+    }
     if (path === '/admin') await expect(page.getByRole('heading', { name: 'Saved members (2)' })).toBeVisible()
     await page.evaluate(async () => {
       for (let y = 0; y < document.body.scrollHeight; y += window.innerHeight) {
