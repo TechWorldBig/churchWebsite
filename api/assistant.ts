@@ -152,7 +152,11 @@ Scope rules:
     // An unavailable model makes every request look like a server/API-key failure.
     // Ignore the old unavailable default if it is still present in Vercel's
     // environment settings from an earlier deployment.
-    const configuredModel = process.env.GEMINI_MODEL?.trim().replace(/^models\//iu, '')
+    const configuredModel = process.env.GEMINI_MODEL?.trim()
+      .replace(/\\/gu, '/')
+      .split('/').pop()
+      ?.replace(/:generateContent$/iu, '')
+      .trim()
     const model = configuredModel && configuredModel !== 'gemini-3.6-flash'
       ? configuredModel
       : 'gemini-2.5-flash'
