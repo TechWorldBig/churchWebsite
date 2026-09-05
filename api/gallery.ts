@@ -3,12 +3,12 @@ import { readMutation } from './_lib/validation.js'
 import { ensureSchema, getSql, sendError } from './_lib/db.js'
 
 export default async function handler(req: any, res: any) {
-  res.setHeader?.('Cache-Control', 'no-store')
+  res.setHeader?.('Cache-Control', req.method === 'GET' ? 'public, max-age=30, stale-while-revalidate=120' : 'no-store')
   try {
     if (req.method !== 'GET' && !await authorizeMutation(req, res)) return
     const body = req.method === 'GET' ? null : readMutation(req, res, 'gallery')
     if (req.method !== 'GET' && !body) return
-    await ensureSchema()
+    if (req.method !== 'GET') await ensureSchema()
     const sql = getSql()
     if (req.method === 'GET') {
       const rows = await sql`SELECT id, photo, date, description FROM gallery_photos ORDER BY date DESC, created_at DESC`

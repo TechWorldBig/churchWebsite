@@ -8,7 +8,7 @@ export default async function handler(req: any, res: any) {
     if (req.method !== 'GET' && !await authorizeMutation(req, res)) return
     const body = req.method === 'GET' ? null : readMutation(req, res, 'attendance')
     if (req.method !== 'GET' && !body) return
-    await ensureSchema()
+    if (req.method !== 'GET') await ensureSchema()
     const sql = getSql()
     if (req.method === 'GET') {
       const rows = await sql`SELECT id, member_id AS "memberId", name, date, present, note FROM attendance ORDER BY date DESC, created_at DESC`
