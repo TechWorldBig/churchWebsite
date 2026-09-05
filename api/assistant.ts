@@ -30,7 +30,7 @@ function isRateLimited(ip: string): boolean {
 
 function getOutputText(response: any): string {
   const candidate = response.candidates?.[0]
-  if (candidate?.finishReason !== 'STOP') return ''
+  if (!candidate) return ''
   return (candidate.content?.parts || [])
     .filter((part: any) => typeof part.text === 'string' && !part.thought)
     .map((part: any) => part.text).join('')
@@ -180,7 +180,7 @@ Scope rules:
     })
 
     if (!geminiResponse.ok) {
-      console.error('Gemini assistant request failed', geminiResponse.status)
+      console.error('Gemini assistant request failed', geminiResponse.status, await safeProviderError(geminiResponse))
       return res.status(502).json({ error: 'The church assistant could not answer right now.' })
     }
     const data = await geminiResponse.json()
@@ -209,7 +209,10 @@ Return UNRELATED if any part of the current request OR proposed answer is outsid
         },
       }),
     })
-    if (!reviewResponse.ok) throw new Error('Review unavailable')
+    if (!reviewResponse.ok) {
+      console.error('Gemini assistant review failed', reviewResponse.status, await safeProviderError(reviewResponse))
+      throw new Error('Review unavailable')
+    }
     const review = JSON.parse(getOutputText(await reviewResponse.json()))
     if (review.decision === 'SENSITIVE') return res.status(200).json({ answer: SENSITIVE_REPLY })
     if (review.decision !== 'ALLOWED') return res.status(200).json({ answer: OUT_OF_SCOPE_REPLY })
@@ -217,6 +220,15 @@ Return UNRELATED if any part of the current request OR proposed answer is outsid
   } catch (error) {
     console.error('Church assistant request could not be completed')
     return res.status(502).json({ error: 'The church assistant could not answer right now.' })
+  }
+}
+
+async function safeProviderError(response: Response): Promise<string> {
+  try {
+    const body = await response.clone().text()
+    return body.replace(/AIza[\w-]+|AQ\.[\w-]+/gu, '[redacted]').slice(0, 500)
+  } catch {
+    return 'No provider error body'
   }
 }
 
