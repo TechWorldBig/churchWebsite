@@ -138,8 +138,8 @@ function getMentionedLanguage(input: string): BibleLanguage | null {
   const lower = input.toLocaleLowerCase().trim()
   const mentioned = [
     (lower.includes('english') ? 'en' : null),
-    (lower.includes('tamil') || lower.includes('தமிழ்') ? 'ta' : null),
-    (lower.includes('malayalam') || lower.includes('മലയാളം') ? 'ml' : null),
+    (lower.includes('tamil') || /[\u0B80-\u0BFF]/u.test(input) ? 'ta' : null),
+    (lower.includes('malayalam') || /[\u0D00-\u0D7F]/u.test(input) ? 'ml' : null),
   ].filter((language): language is BibleLanguage => language !== null)
 
   return mentioned.length === 1 ? mentioned[0] : null

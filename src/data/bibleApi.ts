@@ -211,7 +211,7 @@ export function isBibleRequest(input: string): boolean {
     .some((term) => lower.includes(term))
   if (requestsTopicAnswer) return false
 
-  const asksForExplanation = ['explain', 'meaning', 'mean', 'context', 'why', 'how', 'lesson', 'விளக்கம்', 'அர்த்தம்', 'എന്താണ്', 'അർത്ഥം', 'വിശദീകര']
+  const asksForExplanation = ['explain', 'meaning', 'mean', 'context', 'why', 'how', 'lesson', 'விளக்க', 'அர்த்தம்', 'എന്താണ്', 'അർത്ഥം', 'വിശദീകര']
     .some((term) => lower.includes(term))
   const recognizedReference = reference !== null
     && (resolveEnglishBook(reference.bookText) !== null || /[\u0B80-\u0BFF\u0D00-\u0D7F]/u.test(reference.bookText))

@@ -46,6 +46,8 @@ Never expose the key through a `VITE_` variable. The dedicated Bible-reference l
 
 For local chat, set GEMINI_API_KEY in .env.local and restart npm run dev. For hosted chat, set the same variable in Vercel and redeploy. Responses support custom preaching topics, missionary stories and simple Bible explanations in the requested language.
 
+Language behavior follows the user's current request. An explicitly named language takes priority, otherwise Tamil or Malayalam script is detected automatically, and the saved English/Tamil/Malayalam preference is used for language-neutral prompts such as a bare Bible reference. Short follow-up questions continue in the prior answer's language.
+
 ## Chat security and production deployment
 
 - Gemini credentials stay in server environment variables and HTTP authentication headers, never in browser code or model prompts. `.env.local` is Git-ignored. Every build scans client artifacts for configured secrets and common credential formats and fails if found.

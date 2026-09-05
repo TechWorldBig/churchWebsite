@@ -67,6 +67,25 @@ test('uses saved and inline language preferences for AI requests', async ({ page
   expect(state.assistantRequests.at(-1)?.language).toBe('ml')
 })
 
+test('detects the language users write without requiring them to name it', async ({ page }) => {
+  const state = createMockState()
+  const reply = (request: AssistantRequest) => request.language === 'ta'
+    ? 'தமிழ் விளக்கம்'
+    : request.language === 'ml'
+      ? 'മലയാള വിശദീകരണം'
+      : 'English explanation'
+  await installApiMocks(page, state, reply)
+  await openAssistant(page)
+
+  await ask(page, 'யோவான் 3:16-ஐ விளக்குங்கள்')
+  await expect(page.getByText('தமிழ் விளக்கம்', { exact: true })).toBeVisible()
+  expect(state.assistantRequests.at(-1)?.language).toBe('ta')
+
+  await ask(page, 'ഉല്പത്തി 4:13 വിശദീകരിക്കുക')
+  await expect(page.getByText('മലയാള വിശദീകരണം', { exact: true })).toBeVisible()
+  expect(state.assistantRequests.at(-1)?.language).toBe('ml')
+})
+
 test('routes missionary and preaching requests to the scoped assistant', async ({ page }) => {
   const state = createMockState()
   await installApiMocks(page, state, () => Array.from({ length: 10 }, (_, index) => `${index + 1}. Tested point`).join('\n'))

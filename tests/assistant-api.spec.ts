@@ -61,7 +61,9 @@ test('builds a scoped Gemini request without exposing the server key', async () 
     const requestBody = JSON.parse(String(capturedInit?.body))
     expect(headers['x-goog-api-key']).toBe('test-only-key')
     expect(requestBody.generationConfig.maxOutputTokens).toBe(7_000)
-    expect(requestBody.systemInstruction.parts[0].text).toContain('entirely in Malayalam')
+    expect(requestBody.systemInstruction.parts[0].text).toContain("saved preference, which is Malayalam")
+    expect(requestBody.systemInstruction.parts[0].text).toContain('an explicit language requested in the current message')
+    expect(requestBody.systemInstruction.parts[0].text).toContain('the language in which the current message is predominantly written')
     expect(JSON.stringify(requestBody)).not.toContain('test-only-key')
   } finally {
     globalThis.fetch = originalFetch
