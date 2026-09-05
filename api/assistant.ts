@@ -150,16 +150,9 @@ Scope rules:
   try {
     // Keep the model configurable, but use a generally available default.
     // An unavailable model makes every request look like a server/API-key failure.
-    // Ignore the old unavailable default if it is still present in Vercel's
-    // environment settings from an earlier deployment.
-    const configuredModel = process.env.GEMINI_MODEL?.trim()
-      .replace(/\\/gu, '/')
-      .split('/').pop()
-      ?.replace(/:generateContent$/iu, '')
-      .trim()
-    const model = configuredModel && configuredModel !== 'gemini-3.6-flash'
-      ? configuredModel
-      : 'gemini-2.5-flash'
+    // Keep the production model fixed so a malformed Vercel GEMINI_MODEL
+    // value cannot produce an invalid GenerateContentRequest.model.
+    const model = 'gemini-2.5-flash'
     const signal = AbortSignal.timeout(45_000)
     const geminiResponse = await fetchGemini(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`, {
       method: 'POST',
