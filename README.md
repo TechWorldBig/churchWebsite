@@ -38,8 +38,8 @@ The scoped YDM and Bible assistant uses the Gemini generateContent API. Add this
 
 ```env
 GEMINI_API_KEY=your_gemini_api_key
-# Optional; defaults to gemini-flash-latest
-GEMINI_MODEL=gemini-flash-latest
+# Optional; defaults to gemini-3.6-flash
+GEMINI_MODEL=gemini-3.6-flash
 ```
 
 Never expose the key through a `VITE_` variable. The dedicated Bible-reference lookup, member lookup, and attendance lookup continue to use their existing data sources.

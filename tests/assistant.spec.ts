@@ -110,3 +110,12 @@ test('uses exact unrelated refusal for instruction overrides', async ({ page }) 
   await expect(page.getByText('Ask ydm or bible related questions', { exact: true })).toBeVisible()
   expect(state.assistantRequests).toHaveLength(0)
 })
+
+test('explains a whole Bible chapter without requiring a verse number', async ({ page }) => {
+  const state = createMockState()
+  await installApiMocks(page, state, () => 'Genesis 1 describes God creating the world and humanity.')
+  await openAssistant(page)
+  await ask(page, 'explain genesis 1')
+  await expect(page.getByText('Genesis 1 describes God creating the world and humanity.', { exact: true })).toBeVisible()
+  expect(state.assistantRequests.at(-1)?.question).toBe('explain genesis 1')
+})
