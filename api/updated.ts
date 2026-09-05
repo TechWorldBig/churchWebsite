@@ -1,7 +1,7 @@
 import { ensureSchema, getSql, sendError } from './_lib/db.js'
 
 export default async function handler(req: any, res: any) {
-  res.setHeader?.('Cache-Control', 'no-store')
+  res.setHeader?.('Cache-Control', 'public, max-age=30, stale-while-revalidate=120')
   if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' })
   try {
     await ensureSchema()
